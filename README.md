@@ -22,6 +22,8 @@ The code will look like the following:
      std::cout << "\n";
      return 0;
    }
+// 编译 g++ in_out.cpp -o test
+// 运行 ./test
 ```
 
 To get through this book and successfully complete all the source code examples, you will
@@ -41,39 +43,237 @@ need the following specifications:
 # 程序分析
 ## 章1 基础知识======================================
 ### 1.1 C++基础
+#### 控制程序走向
+> if else结构
+```c
+    int i =200;
+    if(i > 100)
+        cout << "greater than 100.";
+    else
+        cout << "equals or less than 100.";
+```
+> if elseif else 结构
+```c
+    int i =200;
+    if(i > 100)
+        cout << "greater than 100.";
+    else if(i < 100)
+        cout << "less than 100.";
+    else
+       
+       cout << "equals to 100";
+```
+> 多if else分支
+```c
+    cin >> i;
+    cin >> a;
+    cin >> b;
+    if(i == 1) // 谨记为 == 两个等号 判别是否相等
+        cout << a << " + " << b << " is " << a + b;
+    else if(i == 2)
+        cout << a << " - " << b << " is " << a - b;
+    else if(i == 3)
+        cout << a << " * " << b << " is " << a * b;
+    else if(i == 4)
+        cout << a << " / " << b << " is " << a / b;
+```
+> switch case 结构
+```c
+    cin >> i;
+    cin >> a;
+    cin >> b;
+    switch(i)
+    {
+    case 1: // 冒号
+        cout << a << " + " << b << " is " << a + b;
+        break; // break; 一般不省略
+    case 2:
+        cout << a << " - " << b << " is " << a - b;
+        break;
+    case 3:
+        cout << a << " * " << b << " is " << a * b;
+        break;
+    case 4:
+        cout << a << " / " << b << " is " << a / b;
+        break;
+    // default: break; 默认分支====
+    }
+```
+
+> for循环
+```c
+// 产生随机数======
+int GenerateRandomNumber(int min, int max)
+{
+    // static used for efficiency,
+    // so we only calculate this value once
+    // 静态数据，只计算一次，将随机数变成 0~1之间
+    static const double fraction =
+        1.0 / (static_cast<double>(RAND_MAX) + 1.0);
+
+    // evenly distribute the random number
+    // across our range
+    return min + static_cast<int>(
+        (max - min + 1) * (rand() * fraction));
+}
+
+// 设置随机数种子
+srand(static_cast<unsigned int>(time(0)));
+// loop ten times
+for (int i=0; i < 10; ++i) // 循环10次
+{
+    cout << GenerateRandomNumber(0, 100) << " "; // 0~100之间
+}
+    
+```
+
+> while循环 猜数字
+```c
+
+// 计算机随机产生一个整数  1~100之间
+int computerNumber = GenerateRandomNumber(1, 100);
+
+// 用户 猜 的 数字
+int userNumber;
+cout << "Please enter a number between 1 to 100: ";
+cin >> userNumber;
+
+// 猜的不对，会一直循环
+while(userNumber != computerNumber)
+{
+    cout << userNumber << " is ";
+    if(userNumber > computerNumber)
+        cout << "greater";
+    else
+        cout << "lower";
+    cout << " than computer's number" << endl;
+    cout << "Choose another number: ";
+    cin >> userNumber;
+}
+```
+
+>do while循环 计算机猜数字
+```c
+    char userChar; // l/L g/G Y/y
+    int iMin = 1;  // 计算机猜的范围
+    int iMax = 100;
+    int iGuess     // 计算机猜的数字
+    // Run the DO-WHILE loop
+    do
+    {
+        iGuess = GenerateRandomNumber(iMin, iMax);// 根据不断缩小的范围，产生随机数
+        cout << "I guess your number is " << iGuess << endl;
+        cout << "What do you think? ";
+        cin >> userChar; // l/L代表计算机产生的数小了
+        if(userChar == 'L' || userChar == 'l')
+            iMin = iGuess + 1;// 更新 搜索下限为上次猜的数+1
+        else if(userChar == 'G' || userChar == 'g')// g/G代表计算机猜的数大了
+            iMax = iGuess - 1;// 更新搜索上限
+    }
+    while(userChar != 'Y' && userChar != 'y'); // 计算机没猜对，会一直猜
+```
+
+>
+```c
+
+```
+
+>
+```c
+
+```
+
+>
+```c
+
+```
 ### 1.2 抽象数据结构 abstract data type
 ### 1.3 算法分析 
 
 ## 章2 列表List & 链表 Linked List===================
 ### 2.1 列表
-
+>
+```c
+```
 ### 2.2 单向链表
-
+>
+```c
+```
 ### 2.3 双向链表
-
+>
+```c
+```
 ## 章3 Stack栈 和 队列Queue===========================
 ### 3.1 Stack栈
+>
+```c
+```
 ### 3.2 队列Queue
-
+>
+```c
+```
 ### 3.3 双端队列 Double Queue
-
+>
+```c
+```
 ## 章4 排序算法 arranging 冒泡选择插入归并快排 ========
 ### 4.1 冒泡 Bubble 
+>
+```c
+```
 ### 4.2 选择 Selection
+>
+```c
+```
 ### 4.3 插入 Insert
+>
+```c
+```
 ### 4.4 归并 Merge
+>
+```c
+```
 ### 4.5 快排 Quick
+>
+```c
+```
 ### 4.6 计数 Counting
+>
+```c
+```
 ### 4.7 基数 Radix
-
+>
+```c
+```
 ## 章5 查找算法 Searching 线性二分====================
 ### 5.1 线性 Linear search
+>
+```c
+```
 ### 5.2 二分 Binary search
+>
+```c
+```
 ### 5.3 三分 Ternary search
+>
+```c
+```
 ### 5.4 插补 Interpolation Search 
+>
+```c
+```
 ### 5.5 跳跃 Jump Search 
+>
+```c
+```
 ### 5.6 指数 Exponential search
+>
+```c
+```
 ### 5.7 子表 Sublist search
+>
+```c
+```
 
 ## 章6 String 字符数据算法===========================
 
@@ -107,13 +307,22 @@ need the following specifications:
     
     
 ### 7.2 二叉搜索树(Binary Search Tree)
+>
+```c
+```
 ### 7.3 平衡二叉搜索树  balanced BST (AVL)
+
 ### 7.4 二叉堆(Binary heap)
 [参考](https://blog.csdn.net/Colton_Null/article/details/80963217)
-
+>
+```c
+```
 
 ## 章8 哈希算法 Hash===============================
 ### 8.1 hash tables
+>
+```c
+```
 ### 8.2
 ### 8.3 
 ### 8.4
@@ -121,8 +330,27 @@ need the following specifications:
 
 ## 章9 常用算法Real Life 贪婪&分治&动态规划&暴力&随机&回溯====
 ### 9.1 贪婪 Greedy algorithms
+>
+```c
+```
 ### 9.2 分治 Divide and conquer algorithms
+>
+```c
+```
 ### 9.3 动态规划 Dynamic programming
+>
+```c
+```
 ### 9.4 暴力 Brute-force algorithms
+>
+```c
+```
 ### 9.5 随机 Randomized algorithms
+>
+```c
+```
 ### 9.6 回溯 Backtracking algorithms
+>
+```c
+```
+
