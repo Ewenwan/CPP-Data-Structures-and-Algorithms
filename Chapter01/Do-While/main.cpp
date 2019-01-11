@@ -1,10 +1,11 @@
-// Do-While.cbp
+// 8 do-while 循环==让计算机猜数字
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 
 using namespace std;
 
+// 产生随机数=====
 int GenerateRandomNumber(int min, int max)
 {
     // static used for efficiency,
@@ -42,17 +43,17 @@ int main()
     // Run the DO-WHILE loop
     do
     {
-        iGuess = GenerateRandomNumber(iMin, iMax);
+        iGuess = GenerateRandomNumber(iMin, iMax);// 根据不断缩小的范围，产生随机数
         cout << "I guess your number is " << iGuess << endl;
         cout << "What do you think? ";
-        cin >> userChar;
+        cin >> userChar; // l/L代表计算机产生的数小了
         if(userChar == 'L' || userChar == 'l')
-            iMin = iGuess + 1;
-        else if(userChar == 'G' || userChar == 'g')
-            iMax = iGuess - 1;
+            iMin = iGuess + 1;// 更新 搜索下限为上次猜的数+1
+        else if(userChar == 'G' || userChar == 'g')// g/G代表计算机猜的数大了
+            iMax = iGuess - 1;// 更新搜索上限
 
     }
-    while(userChar != 'Y' && userChar != 'y');
+    while(userChar != 'Y' && userChar != 'y'); // 计算机没猜对，会一直猜
 
     cout << "Yeeaayy.. I've got your number." << endl;
     return 0;
