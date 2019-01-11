@@ -1,4 +1,4 @@
-// Enum.cbp
+// 9 enum枚举变量 使用整数索引获取值 
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
