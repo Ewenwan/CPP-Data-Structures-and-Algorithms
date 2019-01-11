@@ -1,4 +1,4 @@
-// Switch.cbp
+// 5 switch case 结构
 #include <iostream>
 
 using namespace std;
