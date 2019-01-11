@@ -1,10 +1,11 @@
-// While.cbp
+// 7 while循环 猜数字
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 
 using namespace std;
 
+// 随机数
 int GenerateRandomNumber(int min, int max)
 {
     // static used for efficiency,
