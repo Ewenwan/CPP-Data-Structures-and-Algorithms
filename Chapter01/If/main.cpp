@@ -1,4 +1,4 @@
-// If.cbp
+// 2. If else 结构
 #include <iostream>
 
 using namespace std;
