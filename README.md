@@ -172,7 +172,7 @@ while(userNumber != computerNumber)
     }
     while(userChar != 'Y' && userChar != 'y'); // 计算机没猜对，会一直猜
 ```
-
+#### 枚举变量 使用整数索引获取值
 >
 ```c
 
