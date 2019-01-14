@@ -1,4 +1,4 @@
-// Simple_Class.cbp
+// 10. 一个简单的类实现 给 动物Animal 起名字
 #include <iostream>
 
 using namespace std;
