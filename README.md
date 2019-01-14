@@ -491,7 +491,7 @@ public:
 };
 
 // 函数模板，接收一个类对象============
-template<typename T> // 注意关键帧 template<typename *>=====
+template<typename T> // 注意关键字 template<typename *>=====
 void GetNameAndMakeSound(T& theAnimal)
 {
     cout << theAnimal.GetName() << " goes "; // 名字
