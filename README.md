@@ -468,8 +468,42 @@ cout << dog2.MakeSound() << endl;
     
 ```
 ### 1.3  模板templates使用
-> 函数模板 Function templates
+> 函数模板 Function templates 接收一个类对象 模板为参数，打印同一类型 类对象的信息
 ```c
+class Cat : public Animal // 公开继承 父类 Animal
+{
+public:
+    // 调用父类的构造函数
+    Cat(string name) : Animal(name) {}
+
+    // 拷贝运算符重载======
+    void operator = (const Cat &D)
+    {
+         m_name = D.m_name;
+    }
+
+    // here we implement the interface
+    string MakeSound() override
+    {
+        return "meow-meow!"; // 与 dog 叫声不一样====
+    }
+
+};
+
+// 函数模板，接收一个类对象============
+template<typename T> // 注意关键帧 template<typename *>=====
+void GetNameAndMakeSound(T& theAnimal)
+{
+    cout << theAnimal.GetName() << " goes "; // 名字
+    cout << theAnimal.MakeSound() << endl;   // 叫声
+}
+
+// 使用同一个模板函数，打印同一类型 类对象的信息======
+Dog dog = Dog("Bulldog");
+GetNameAndMakeSound(dog); 
+
+Cat cat = Cat("Persian Cat");
+GetNameAndMakeSound(cat);
 
 ```
 
