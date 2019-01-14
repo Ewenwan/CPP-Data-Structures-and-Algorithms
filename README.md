@@ -413,9 +413,8 @@ public:
     // Forward the constructor arguments 转发构造函数参数？
     Dog(string name) : Animal(name) {}// 直接使用 父类的 构造函数
 
-    // 在之类中实现具体的叫声函数(父类中定义的虚函数，占的茅坑)
+    // 在子类中实现具体的叫声函数(父类中定义的虚函数，占的茅坑)
     string MakeSound() override  // 注意后面跟着的 override
-    
     // C++ 11添加了两个继承控制关键字：override和final===========================
     // override确保在派生类中声明的重载函数跟基类的虚函数有相同的签名。
     // final阻止类的进一步派生和虚函数的进一步重载。 
@@ -507,22 +506,61 @@ GetNameAndMakeSound(cat);
 
 ```
 
-> 类模板 Class templates
+> 类模板 Class templates 可接收类对象类型等其他任何类型
 ```c
+// 类模板====内置类型 可以传入 类类型=================
+template <typename T> // 类内 变量的类型 为 模板
+class AnimalTemplate  // 类 名字
+{
+private:
+    T m_animal; // 模板类型 变量=== 可以直接传入类类型===
+
+public:
+    AnimalTemplate(T animal) : m_animal(animal) {}
+    
+    // 打印 信息
+    void GetNameAndMakeSound()
+    {
+        cout << m_animal.GetName() << " goes ";
+        cout << m_animal.MakeSound() << endl;
+    }
+};
+
+// 类实例 Dog
+Dog dog = Dog("Bulldog");
+// 传入 Dog类对象实例 构造 模板类实例====
+AnimalTemplate<Dog> dogTemplate(dog);
+dogTemplate.GetNameAndMakeSound();
+
+// 
+Cat cat = Cat("Persian Cat");
+AnimalTemplate<Cat> catTemplate(cat);
+catTemplate.GetNameAndMakeSound();
 
 ```
 
 > 标准模板库 Standard Template Library
-```c
 
-```
-
-
+     算法   algorithms：排序sorting、搜索searching
+     容器   containers：存储数据/对象
+     迭代器 iterators:  迭代器，遍历值序列，begin(),end(), 反向迭代器rbegin(),rend()
+     函数   functions:  函数指针，函数对象
+     
 
 ### 1.4 算法分析 
 > 渐近分析 Asymptotic analysis
 ```c
-
+// 该函数复杂度为 4n+1
+void Looping(int n)
+{
+ int i = 0;    // 执行一次 赋值 
+ 
+ while(i < n)         // 1次比较====  
+ {
+   cout << i << endl; // 1次打印====
+   i = i + 1;         // 2次 = 1次加法 + 1次赋值===
+ }
+}
 ```
 
 > 最坏/平均/最好情况分析 Worst, average, and best cases
@@ -540,6 +578,19 @@ GetNameAndMakeSound(cat);
 >
 ```c
 ```
+
+     
+```c
+
+```
+
+
+     
+```c
+
+```
+
+
 ### 2.2 单向链表
 >
 ```c
