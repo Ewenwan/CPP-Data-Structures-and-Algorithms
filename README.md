@@ -550,7 +550,7 @@ catTemplate.GetNameAndMakeSound();
 ### 1.4 算法分析 
 > 渐近分析 Asymptotic analysis
 ```c
-// 该函数复杂度为 4n+1
+// 单层循环===该函数复杂度为 4n+1-------------------------------------> O(n)
 void Looping(int n)
 {
  int i = 0;    // 执行一次 赋值 
@@ -561,6 +561,23 @@ void Looping(int n)
    i = i + 1;         // 2次 = 1次加法 + 1次赋值===
  }
 }
+
+// 双层循环======  1+ n*( 1 + 1 + (4n) + 2 ) = 4n^2 + 4n +1 --------> O(n^2)
+void Pairing(int n)
+{
+ int i = 0;   // 1次赋值 
+ while(i < n) // 循环内 1次比较
+ {
+   int j = 0; // 循环内 1次赋值
+   while(j < n) // 二层循环内 1次比较
+   {
+     cout << i << ", " << j << endl; // 1次打印
+     j = j + 1;                      // 1次赋值 + 1次加法
+   }
+   i = i + 1;// 循环内 1次加法+1次赋值
+ }
+}
+
 ```
 
 > 最坏/平均/最好情况分析 Worst, average, and best cases
