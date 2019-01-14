@@ -1,4 +1,4 @@
-// Assignment_Operator_Overload.cbp
+// 13. 类的拷贝操作符重载实现，避免浅拷贝(shallow copying)问题
 #include <iostream>
 
 using namespace std;
@@ -13,9 +13,7 @@ public:
     {
 
     }
-
-    // The interface that has to be implemented
-    // in derived class
+    // 父类虚函数 占坑===============
     virtual string MakeSound() = 0;
 
     string GetName()
@@ -25,18 +23,20 @@ public:
 
 };
 
-class Dog : public Animal
+class Dog : public Animal // 之类Dog 公开继承 父类 Animal
 {
 public:
     // Forward the constructor arguments
-    Dog(string name) : Animal(name) {}
+    Dog(string name) : Animal(name) {} // 直接使用父类的构造函数
 
-    // Copy assignment operator overloading
+    // 拷贝赋值运算符重载 实现====
     void operator = (const Dog &D ) {
-         m_name = D.m_name;
+         m_name = D.m_name;// 赋值名字
       }
 
-    // here we implement the interface
+    // C++ 11添加了两个继承控制关键字：override和final===========================
+    // override确保在派生类中声明的重载函数跟基类的虚函数有相同的签名。
+    // final阻止类的进一步派生和虚函数的进一步重载。 
     string MakeSound() override
     {
         return "woof-woof!";
@@ -46,10 +46,12 @@ public:
 
 int main()
 {
+    // 创建类实例对象========================
     Dog dog = Dog("Bulldog");
     cout << dog.GetName() << " is barking: ";
     cout << dog.MakeSound() << endl;
-
+    
+    // 直接拷贝类=============================
     Dog dog2 = dog;
     cout << dog2.GetName() << " is barking: ";
     cout << dog2.MakeSound() << endl;
