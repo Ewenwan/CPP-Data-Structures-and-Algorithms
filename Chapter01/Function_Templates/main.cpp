@@ -1,4 +1,4 @@
-// Function_Templates.cbp
+// 14. 函数模板 Function templates 接收一个类对象 模板为参数
 #include <iostream>
 
 using namespace std;
@@ -13,9 +13,7 @@ public:
     {
 
     }
-
-    // The interface that has to be implemented
-    // in derived class
+    // 父类虚函数占坑===================
     virtual string MakeSound() = 0;
 
     string GetName()
@@ -31,13 +29,13 @@ public:
     // Forward the constructor arguments
     Dog(string name) : Animal(name) {}
 
-    // Copy assignment operator overloading
+    // 拷贝运算符重载======
     void operator = (const Dog &D)
     {
          m_name = D.m_name;
     }
 
-    // here we implement the interface
+    // 虚函数实现
     string MakeSound() override
     {
         return "woof-woof!";
@@ -45,13 +43,13 @@ public:
 
 };
 
-class Cat : public Animal
+class Cat : public Animal // 公开继承 父类 Animal
 {
 public:
-    // Forward the constructor arguments
+    // 调用父类的构造函数
     Cat(string name) : Animal(name) {}
 
-    // Copy assignment operator overloading
+    // 拷贝运算符重载======
     void operator = (const Cat &D)
     {
          m_name = D.m_name;
@@ -60,12 +58,13 @@ public:
     // here we implement the interface
     string MakeSound() override
     {
-        return "meow-meow!";
+        return "meow-meow!"; // 与 dog 叫声不一样====
     }
 
 };
 
-template<typename T>
+// 函数模板，接收一个类对象============
+template<typename T> // 注意关键字 template<typename *>===== 
 void GetNameAndMakeSound(T& theAnimal)
 {
     cout << theAnimal.GetName() << " goes ";
