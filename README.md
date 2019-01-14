@@ -173,7 +173,7 @@ while(userNumber != computerNumber)
     }
     while(userChar != 'Y' && userChar != 'y'); // 计算机没猜对，会一直猜
 ```
-#### 枚举变量 使用整数索引获取值
+#### 枚举变量 使用整数索引获取值 结构体混合变量
 >
 ```c
 // 牌的花色
@@ -277,6 +277,12 @@ string GetElementString(CardElements element)
 
     return e;
 }
+// 描述牌信息 的 结构体======
+struct Cards
+{
+ CardSuits suit;
+ CardElements element;
+};
 
 // generate random suit and element card
 int iSuit = GenerateRandomNumber(0, 3);    // 四种花色中的一种，下标
@@ -295,24 +301,205 @@ CardSuits suit = static_cast<CardSuits>(
 CardElements element = static_cast<CardElements>(
     iElement);
 
+// 结构体=====================
+//Cards card;
+//card.suit = static_cast<CardSuits>( GenerateRandomNumber(0, 3));
+// card.element = static_cast<CardElements>(   GenerateRandomNumber(0, 12));
+
 // 打印牌 的字符串信息===============
 cout << "Your card is ";
-cout << GetElementString(element);
-cout << " of " << GetSuitString(suit) << endl;
+cout << GetElementString(element);// card.element
+cout << " of " << GetSuitString(suit) << endl;//card.suit
     
 ```
 
->
+### 1.2 抽象数据结构 abstract data type class类实现
+    一种包含 变量和方法的 容器 或者 集合
+    成员数学：
+        1. public 公开的，数据和方法可以被所有使用者访问
+        2. protected 保护的，数据和方法，可以被 类自己、类的继承者(子代)、类的朋友(同辈) 访问
+        3. private   私有的，数据和方法，可以被 类自己、类的朋友(同辈) 访问
+    struct 默认为 public属性，推荐 使用struct定义 数据集合，不包括方法
+    class  默认为 private属性
+
+> 一个简单的类实现 给 动物Animal 起名字
+```c
+class Animal // 定义一个 Animal 类
+{
+private:
+    // 私有变量，可以被 类自己、类的朋友(同辈) 访问
+    // main 函数等其他外部函数不可访问，但是可以通过 公开的函数间接访问
+    string m_name;
+
+public:
+    // 给动物起名字
+    void GiveName(string name)
+    {
+        m_name = name;
+    }
+    
+    // 获取该宠物的名字
+    // 外 部可以 通过 公开的函数间接访问 类内的私有变量=====
+    string GetName()
+    {
+        return m_name;
+    }
+};
+
+// 定义一个 动物类 实例 小狗
+Animal dog = Animal();
+// 该小狗对象 起名字为 "dog"
+dog.GiveName("dog");
+// 打印该小狗的名字
+cout << "Hi, I'm a " << dog.GetName() << endl;
+    
+```
+
+> 类构造函数实现
+```c
+class Animal
+{
+private:
+    string m_name;
+
+public:
+    // 类构造函数实现
+    Animal(string name) : m_name(name)
+    { // 使用传入变量 name 为 类内私有变量 m_name 赋值
+      // 创建类实例式可传入对象的名字，省去了 命名函数
+    }
+    
+    // 还是需要 通过公开的 方法 在外部 访问 类内变量
+    string GetName()
+    {
+        return m_name;
+    }
+};
+
+// 创建类实例式可传入对象的名字，省去了 命名函数
+Animal dog = Animal("dog");
+// 还是需要 通过公开的 方法 在外部 访问 类内变量
+cout << "Hi, I'm a " << dog.GetName() << endl;
+
+```
+
+> 创建类的继承者，父类虚函数占坑，子类实现具体函数，基因遗传，豌豆杂交
+```c
+class Animal // 动物类
+{
+private:
+    string m_name;
+
+public:
+    // 构造函数
+    Animal(string name) : m_name(name)
+    {
+    }
+    
+    // 不同的动物有不同的叫声，该动物大类下 设置一个虚函数 相当于先占坑，先占茅坑
+    // The interface that has to be implemented in derived class
+    // 等到继承者在实现，注意该函数前面 有 virtual 符号
+    virtual string MakeSound() = 0;
+
+    string GetName()
+    {
+        return m_name;
+    }
+};
+
+class Dog : public Animal // 小狗类Dog 公开 继承于 父类 Animal 动物
+{
+public:
+    // Forward the constructor arguments 转发构造函数参数？
+    Dog(string name) : Animal(name) {}// 直接使用 父类的 构造函数
+
+    // 在之类中实现具体的叫声函数(父类中定义的虚函数，占的茅坑)
+    string MakeSound() override  // 注意后面跟着的 override
+    
+    // C++ 11添加了两个继承控制关键字：override和final===========================
+    // override确保在派生类中声明的重载函数跟基类的虚函数有相同的签名。
+    // final阻止类的进一步派生和虚函数的进一步重载。 
+    {
+        return "woof-woof!";// 旺旺雪饼好吃======
+    }
+
+};
+
+// 直接创建 之类的对象
+Dog dog = Dog("Bulldog");
+
+cout << dog.GetName() << " is barking: ";// 该函数是父类中的实现
+cout << dog.MakeSound() << endl;         // 该函数是之类中的实现
+
+```
+
+> 类的拷贝操作符重载实现，避免浅拷贝(shallow copying)问题
+```c
+class Dog : public Animal // 之类Dog 公开继承 父类 Animal
+{
+public:
+    // Forward the constructor arguments
+    Dog(string name) : Animal(name) {} // 直接使用父类的构造函数
+
+    // 拷贝赋值运算符重载 实现====
+    void operator = (const Dog &D ) {
+         m_name = D.m_name;// 赋值名字
+      }
+
+    // C++ 11添加了两个继承控制关键字：override和final===========================
+    // override确保在派生类中声明的重载函数跟基类的虚函数有相同的签名。
+    // final阻止类的进一步派生和虚函数的进一步重载。 
+    string MakeSound() override
+    {
+        return "woof-woof!";
+    }
+
+};
+
+// 创建类实例对象========================
+Dog dog = Dog("Bulldog");
+cout << dog.GetName() << " is barking: ";
+cout << dog.MakeSound() << endl;
+
+// 直接拷贝类=============================
+Dog dog2 = dog;
+cout << dog2.GetName() << " is barking: ";
+cout << dog2.MakeSound() << endl;
+    
+```
+### 1.3  模板templates使用
+> 函数模板 Function templates
 ```c
 
 ```
 
->
+> 类模板 Class templates
 ```c
 
 ```
-### 1.2 抽象数据结构 abstract data type
-### 1.3 算法分析 
+
+> 标准模板库 Standard Template Library
+```c
+
+```
+
+
+
+### 1.4 算法分析 
+> 渐近分析 Asymptotic analysis
+```c
+
+```
+
+> 最坏/平均/最好情况分析 Worst, average, and best cases
+```c
+
+```
+
+> “小于等于”O(big-Oh)  “大于等于”Ω(big-theta) “等于”Θ(big-theta)  “小于”o(little-oh)
+```c
+
+```
 
 ## 章2 列表List & 链表 Linked List===================
 ### 2.1 列表
