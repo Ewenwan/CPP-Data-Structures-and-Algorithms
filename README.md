@@ -581,14 +581,13 @@ void Pairing(int n)
 ```
 
 > 最坏/平均/最好情况分析 Worst, average, and best cases
-```c
-
-```
 
 > “小于等于”O(big-Oh)  “大于等于”Ω(big-theta) “等于”Θ(big-theta)  “小于”o(little-oh)
-```c
-
-```
+      
+       f(n) = 4n + 1
+       时间复杂度为 O(n)
+       最坏情况时间复杂度 Θ(n)
+       最好情况时间复杂度 Θ(1)
 
 ## 章2 列表List & 链表 Linked List===================
 ### 2.1 列表
