@@ -706,6 +706,7 @@ void List::Insert(int index, int val)
 
     // Fill the new array with inserted data
     for(int i=0, j=0; i < m_count; ++i)// i为 新数组索引，j为 旧数组索引
+                                       // i每次循环 必+1-----------------------------------
     {
         if(index == i)
         {
@@ -714,7 +715,7 @@ void List::Insert(int index, int val)
         else
         {
             m_items[i] = oldArray[j]; // 就数组元素 放到新数组中
-            ++j; // 旧数组索引 ++ 
+            ++j; // 旧数组索引 ++      // j 为非指定索引处 才+1--------------------------
         }
     }
 
@@ -740,10 +741,11 @@ void List::Remove(int index)
 
     // 从旧数组 赋值 元素到新数组，除指定元素外不复制
     for(int i=0, j=0; i < m_count; ++i, ++j)//i 新数组索引，j旧数组索引
+                                            // i,j 每次循环 必+1---
     {
         if(index == j)// 遍历到 旧数组中 指定 的 索引
         {
-            ++j; // 直接跳过该 位置
+            ++j; // 直接跳过该 位置           // 同时指定索引处，j还会 再次+1 跳过指定元素
         }
 
         m_items[i] = oldArray[j];// 旧数组元素 赋值 到 新数组元素
