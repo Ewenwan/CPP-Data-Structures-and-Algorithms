@@ -654,7 +654,7 @@ for(int i = 0; i < array_num; ++i)
 ### 2.2 列表List  动态内存的数组 
 >
 ```c
-// File : List.h ===========
+// File : List.h =======================================================
 #ifndef LIST_H
 #define LIST_H
 #include <iostream>
@@ -686,7 +686,7 @@ class List // 类
 };
 #endif // LIST_H
 
-//List.c ==================
+//List.c =====================================================================
 // 在数组中插入一个元素，这里简单为创建一个新长度的数组，旧数组元素复制过来==
 // 不过可以使用金蝉脱壳，每次多申请一些内存空间，容量不够了，再扩容=========
 void List::Insert(int index, int val)
@@ -757,8 +757,102 @@ void List::Remove(int index)
 
 // 完整实现 
 // https://github.com/Ewenwan/CPP-Data-Structures-and-Algorithms/blob/master/Chapter02/List/src/List.cpp
+
+
+
+// ========================使用=============================================
+List list = List();
+
+// 依次插入元素=====
+list.Insert(0, 21);
+list.Insert(1, 47);
+list.Insert(2, 87);
+list.Insert(3, 35);
+list.Insert(4, 92);
+
+// 打印元素=========
+for(int i = 0; i < list.Count(); ++i)
+{
+    cout << list.Get(i) << " ";
+}
+
+// 查找 87
+cout << "Search element 71" << endl;
+int result = list.Search(71);
+if(result == -1) // 没找到 返回-1
+    cout << "71 is not found";
+else
+    cout << "71 is found at index " << result;
+cout << endl << endl;
+
+// 删除 
+list.Remove(2);
+    
 ```
-### 2.3 单向链表
+
+### 2.3 节点链，关系网，朋友圈网，人脉圈，七大姑八大姨...
+```c
+// 实现===================================
+class Node // 节点类，嫌疑人
+{
+public:
+    int Value;      // 嫌疑人信息，数据值，
+    Node * Next;    // 节点指向信息，人物关系
+};
+
+// 根据任务链信息，找出整个犯罪团伙===============
+void PrintNode(Node * node)
+{
+    // NULL 表明 线索到头了，幕后大佬后面没老虎了===
+    while(node != NULL)
+    {
+        cout << node->Value << " -> ";// 打印当前节点(嫌疑人)的信息(名字，脏污，财产)
+        node = node->Next;            // 找到下一个嫌疑人=====
+    }
+
+    cout << "NULL" << endl;
+}
+
+// 使用=============================
+    // +------+------+
+    // |  7   | NULL |
+    // +------+------+
+    // 节点1
+    Node * node1 = new Node;
+    node1->Value = 7;
+
+    // +------+------+
+    // |  14  | NULL |
+    // +------+------+
+    // 节点2
+    Node * node2 = new Node;
+    node2->Value = 14;
+
+    // +------+------+
+    // |  21  | NULL |
+    // +------+------+
+    // 节点3
+    Node * node3 = new Node;
+    node3->Value = 21;
+
+    // +------+------+  +------+------+  +------+------+
+    // |  7   |   +---->|  14  | NULL |  |  21  | NULL |
+    // +------+------+  +------+------+  +------+------+
+    // 节点1--->节点2
+    node1->Next = node2;
+
+    // +------+------+  +------+------+  +------+------+
+    // |  7   |   +---->|  14  |   +---->|  21  | NULL |
+    // +------+------+  +------+------+  +------+------+
+    // 节点1--->节点2--->节点3
+    node2->Next = node3;
+
+    // 打印 节点链，找出人脉链，挖地三尺
+    PrintNode(node1);
+    
+```
+
+### 2.4 单向链表
 >
 ```c
 
@@ -766,7 +860,7 @@ void List::Remove(int index)
 ```
 
 
-### 2.4 双向链表
+### 2.5 双向链表
 >
 ```c
 
