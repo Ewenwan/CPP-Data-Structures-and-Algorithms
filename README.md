@@ -590,31 +590,188 @@ void Pairing(int n)
        最好情况时间复杂度 Θ(1)
 
 ## 章2 列表List & 链表 Linked List===================
-### 2.1 列表
->
+### 2.1 数组 array
+> 内存地址连续
 ```c
+// 直接初始化 数组
+int arr[] = { 21, 47, 87, 35, 92 };
+
+// Access each element
+cout << "Array elements: ";
+// 数组元素数量
+int array_num = sizeof(arr)/sizeof(*arr); // 数组总元素字节数量sizeof(arr)， *arr数组首元素字节数量
+for(int i = 0; i < array_num; ++i)
+    cout << arr[i] << " ";
+cout << endl;
+
+// 使用下标 直接修改 数组元素
+arr[2] = 30;
+arr[3] = 64;
+
+// 再次 打印 数组元素
+cout << "Array elements: ";
+for(int i = 0; i < array_num; ++i)
+    cout << arr[i] << " ";
 ```
 
+> new 分配数组，返回指针，使用指针访问元素     
+```c
+    // Initialize tee array length
+    int arrLength = 5;
+
+    // 使用 new 分配数组内存空间 并返回首地址指针
+    int * ptr = new int[arrLength] { 21, 47, 87, 35, 92 };
+    // 二维数组初始化 
+    // int multiArray[][] = new int[3][5];
+
+    // 使用 *解引用 来获取制造地址处的 值
+    cout << "Using pointer increment" << endl;
+    cout << "Value\tAddress" << endl;
+    while(*ptr) // 不安全，数组后内地址一版存储的值为 0======
+    {
+        cout << *ptr << "\t"; // 解引用，获取地址处存储的值
+        cout << ptr << endl;  // 打印地址
+        ptr++;
+    }
+    cout << endl;
+
+    // 上面的处理指针向后移动了 数组元素数量 个 存储单位
+    ptr = ptr - 5;// 恢复 数组首地址的值
+
+    // 按照数组方式 使用[] 下标索引 获取数组元素
+    cout << "Using pointer index" << endl;
+    cout << "Value\tAddress" << endl;
+    for(int i = 0; i < arrLength; ++i)
+    {
+        cout << ptr[i] << "\t";  // 使用[] 下标索引 获取数组元素
+        cout << &ptr[i] << endl; // & 获取 元素 的存储地址===
+    }
+    
+    delete [] ptr;// 释放 动态申请的内存
+```
+
+
+### 2.2 列表List  动态内存的数组 
+>
+```c
+// File : List.h ===========
+#ifndef LIST_H
+#define LIST_H
+#include <iostream>
+
+class List // 类
+{
+ private:  // 私有 变量
+     int m_count;   // 元素数量
+     int * m_items; // 首元素指针
      
-```c
+ public:
+     List();  // 类 构造函数
+     ~List(); // 类 析构函数
 
-```
-
-
+     // 获取指定索引处的值，因为不能简单的使用连续地址函数获取指定索引处的位置的元素值
+     int Get(int index);
      
-```c
+     // 在 指定索引 位置 插入元素，新建一个数组，旧数组元素赋值过来，在指定位置插入 新元素======
+     void Insert(int index, int val);
+     
+     // 在链表中搜索指定元素 val
+     int Search(int val);
+     
+     // 删除指定索引处的 元素，新建一个数量少1的数组，除指定元素外不复制
+     void Remove(int index);
+     
+     // 统 计链表元素数量 
+     int Count();
+};
+#endif // LIST_H
 
+//List.c ==================
+// 在数组中插入一个元素，这里简单为创建一个新长度的数组，旧数组元素复制过来==
+// 不过可以使用金蝉脱壳，每次多申请一些内存空间，容量不够了，再扩容=========
+void List::Insert(int index, int val)
+{
+    // 索引范围检查===
+    if(index < 0 || index > m_count)
+        return;
+
+    // 记录 旧数组首地址
+    int * oldArray = m_items;
+
+    // 插入一个元素，数组元素数量+1
+    m_count++;
+
+    // 每次都 新分配一个 新数组
+    m_items = new int[m_count];
+
+    // Fill the new array with inserted data
+    for(int i=0, j=0; i < m_count; ++i)// i为 新数组索引，j为 旧数组索引
+    {
+        if(index == i)
+        {
+            m_items[i] = val; // 新插入的元素 放入指定 index 位置
+        }
+        else
+        {
+            m_items[i] = oldArray[j]; // 就数组元素 放到新数组中
+            ++j; // 旧数组索引 ++ 
+        }
+    }
+
+    // 清空 旧数组 内存空间
+    delete [] oldArray;
+}
+
+// 删除指定索引处的元素，和插入的思想一致，创建一个新数组，除指定元素外不复制
+void List::Remove(int index)
+{
+    // 索引范围检查===
+    if(index < 0 || index > m_count)
+        return;
+
+   // 记录 旧数组首地址
+    int * oldArray = m_items;
+
+    // 删除一个元素，数量-1
+    m_count--;
+
+    // 初始化一个长度 较少1 的新数组
+    m_items = new int[m_count];
+
+    // 从旧数组 赋值 元素到新数组，除指定元素外不复制
+    for(int i=0, j=0; i < m_count; ++i, ++j)//i 新数组索引，j旧数组索引
+    {
+        if(index == j)// 遍历到 旧数组中 指定 的 索引
+        {
+            ++j; // 直接跳过该 位置
+        }
+
+        m_items[i] = oldArray[j];// 旧数组元素 赋值 到 新数组元素
+    }
+
+    // 清空 旧数组 内存空间
+    delete [] oldArray;
+}
+
+// 完整实现 
+// https://github.com/Ewenwan/CPP-Data-Structures-and-Algorithms/blob/master/Chapter02/List/src/List.cpp
 ```
-
-
-### 2.2 单向链表
+### 2.3 单向链表
 >
 ```c
+
+
 ```
-### 2.3 双向链表
+
+
+### 2.4 双向链表
 >
 ```c
+
+
+
 ```
+
 ## 章3 Stack栈 和 队列Queue===========================
 ### 3.1 Stack栈
 >
