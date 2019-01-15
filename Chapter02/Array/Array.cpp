@@ -1,5 +1,4 @@
-// Project: Array.cbp
-// File   : Array.cpp
+// 1. 数组 array 内存地址连续 
 
 #include <iostream>
 
@@ -12,17 +11,20 @@ int main()
 
     // Access each element
     cout << "Array elements: ";
-    for(int i = 0; i < sizeof(arr)/sizeof(*arr); ++i)
+    // 数组元素数量
+    int array_num = sizeof(arr)/sizeof(*arr); // 数组总元素字节数量sizeof(arr)， *arr数组首元素字节数量
+    for(int i = 0; i < array_num; ++i)
         cout << arr[i] << " ";
     cout << endl;
 
-    // Manipulate several elements
+    // 使用下标 直接修改 数组元素
     arr[2] = 30;
     arr[3] = 64;
 
-    // Access each element again
+    // 再次 打印 数组元素
     cout << "Array elements: ";
-    for(int i = 0; i < sizeof(arr)/sizeof(*arr); ++i)
+    for(int i = 0; i < array_num; ++i)
         cout << arr[i] << " ";
+    
     cout << endl;
 }
