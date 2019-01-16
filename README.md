@@ -1258,11 +1258,348 @@ DoublyNode<T>::DoublyNode(T value)
 
 > 双向链表 有双向节点构成的 双向索引链条  在插入/删除节点时需要考虑 设置前继和后继节点的指针
 ```c
+// https://github.com/Ewenwan/CPP-Data-Structures-and-Algorithms/blob/master/Chapter02/Doubly_Linked_List/include/DoublyLinkedList.h
 
+template <typename T>
+class DoublyLinkedList
+{
+    private: // 私有数据
+        int m_count;// 双向节点 数量记录
+
+    public:
+        // 双向链表头
+        DoublyNode<T> * Head;
+
+        // 双向链表尾
+        DoublyNode<T> * Tail;
+
+        // 构造函数===========
+        DoublyLinkedList();
+
+        // 获取指定索引上的双向节点 Get() operation
+        DoublyNode<T> * Get(int index);
+
+        // 双向链表插入操作 Insert() operation
+        void InsertHead(T val);// 表头插入
+        void InsertTail(T val);// 表尾插入
+        void Insert(int index, T val);// 普通插入函数
+
+        //查找数据信息 Search() operation
+        int Search(T val);
+
+        // 双向链表删除节点操作 Remove() operation
+        void RemoveHead();
+        void RemoveTail();
+        void Remove(int index);
+
+        // 附加操作 Additional operation
+        int Count();       // 计数 
+        void PrintList();  // 正向打印 双向链表
+        void PrintListBackward();// 反向打印 双向链表
+};
+
+// 实现===================================================
+// 表头插入节点==================================
+template <typename T>
+void DoublyLinkedList<T>::InsertHead(T val)
+{
+    // 新建节点
+    DoublyNode<T> * node = new DoublyNode<T>(val);
+    
+    // 连接处 互相指向===========each other======
+    // 新节点的后继 指向原 链表表头
+    node->Next = Head;
+    // 如果原 头结点存在，则原头结点的 前继 需要指向 新节点(作为新表头)
+    if(Head != NULL)
+        Head->Previous = node;
+
+    // 新节点 重置为 链表表头
+    Head = node;
+
+    // 如果链表中只有一个节点，那么 表尾 == 表头
+    if(m_count == 0)
+        Tail = Head;
+
+    // One element is added
+    m_count++;
+}
+
+// 表尾插入节点=============================
+template <typename T>
+void DoublyLinkedList<T>::InsertTail(T val)
+{
+    // 链表为空时，和表头插入一致
+    if(m_count == 0)
+    {
+        InsertHead(val);
+        return;
+    }
+
+    // 新建一个节点
+    DoublyNode<T> * node = new DoublyNode<T>(val);
+    // 原尾节点 的 后继 设置为 新节点  // 注意需要双向关联
+    Tail->Next = node;
+    // 新节点的 前继 设置为 原尾节点
+    node->Previous = Tail;
+    // 新节点 重置为 链表的 尾节点
+    Tail = node;
+
+    // 数量++
+    m_count++;
+}
+// 一般位置插入节点===================
+template <typename T>
+void DoublyLinkedList<T>::Insert(int index, T val)
+{
+    // 插入位置 范围检查
+    if(index < 0 || index > m_count)
+        return;
+
+    // 在头部插入====
+    if(index == 0)
+    {
+        InsertHead(val);
+        return;
+    }
+    // 在尾部插入=====
+    else if(index == m_count)
+    {
+        InsertTail(val);
+        return;
+    }
+
+    // 目标位置的 前置节点
+    DoublyNode<T> * prevNode = Head;
+
+    // 遍历到 前置节点
+    for(int i = 0; i < index - 1; ++i)
+    {
+        prevNode = prevNode->Next; // 0,...,index-2
+    }
+
+    // 后置节点 
+    DoublyNode<T> * nextNode = prevNode->Next;//0,...,index-1
+
+    // 创建一个新的节点
+    DoublyNode<T> * node = new DoublyNode<T>(val);
+
+    // 需要重新设置4个指向======
+    // prevNode----> node ------>nextNode
+    // prevNode<---- node <----- nextNode
+    node->Next = nextNode;     // 1.               node ------>nextNode
+    node->Previous = prevNode; // 2. prevNode<---- node
+    prevNode->Next = node;     // 3. prevNode----> node
+    nextNode->Previous = node; // 4.               node <----- nextNode
+
+    // One element is added
+    m_count++;
+}
+
+
+// 双向链表中 删除节点===============================================
+template <typename T>
+void DoublyLinkedList<T>::RemoveHead()
+{
+    // Do nothing if list is empty
+    if(m_count == 0)
+        return;
+
+    // 原 链表头
+    DoublyNode<T> * node = Head;
+
+    // 原 链表头后继 设置为 新链表头
+    Head = Head->Next;
+
+    // 删除原链表头
+    delete node;
+
+    // 设置 表头前置 节点为 NULL
+    if(Head != NULL)
+        Head->Previous = NULL;
+
+    // 数量--
+    m_count--;
+}
+
+template <typename T>
+void DoublyLinkedList<T>::RemoveTail()
+{
+    // Do nothing if list is empty
+    if(m_count == 0)
+        return;
+
+    // If List element is only one
+    // just simply call RemoveHead()
+    if(m_count == 1)
+    {
+        RemoveHead();
+        return;
+    }
+
+    // 原表尾节点
+    DoublyNode<T> * node = Tail;
+
+    // 可以反向遍历 找到 原表尾节点的 前置节点，并设置为 新的表尾节点
+    Tail = Tail->Previous;
+
+    // 表尾节点的后继设置为 NULL
+    Tail->Next = NULL;
+
+    // 删除原 链表表尾节点
+    delete node;
+
+    // 数量--
+    m_count--;
+}
+
+template <typename T>
+void DoublyLinkedList<T>::Remove(int index)
+{
+    // 链表为空检查
+    if(m_count == 0)
+        return;
+
+    // 指定位置索引 范围检查
+    if(index < 0 || index >= m_count)
+        return;
+
+    // 删除表头结点
+    if(index == 0)
+    {
+        RemoveHead();
+        return;
+    }
+    // 删除表尾节点
+    else if(index == m_count - 1)
+    {
+        RemoveTail();
+        return;
+    }
+
+    // 指定位置 的 前置节点
+    DoublyNode<T> * prevNode = Head;
+    for(int i = 0; i < index - 1; ++i)
+    {
+        prevNode = prevNode->Next; // 0,...,index-2
+    }
+    // 需要删除的 目标节点
+    DoublyNode<T> * node = prevNode->Next; // 0,...,index-1
+
+    // 目标节点 后  的 后置节点
+    DoublyNode<T> * nextNode = node->Next; // 0,...,index
+
+    // 新增两个指向   前置节点 ---->  后置节点
+    //               前置节点 <----  后置节点
+    prevNode->Next = nextNode;     // 前置节点 ---->  后置节点
+    nextNode->Previous = prevNode; // 前置节点 <----  后置节点
+
+    // 删除目标节点
+    delete node;
+
+    // 数量--
+    m_count--;
+}
 
 ```
 
+### 2.6 STD 中的列表List 和 链表LinkedList
+     列表 List                   : std::vector
+     单向链表 SinglyLinkedList   : std::forward_list
+     双向链表 DoublyLinkedList   : std::list
+```c
+//====================================================================
+// 列表 向量 vector====================================
+vector<int> vectorlist = { 35, 41, 94 }; // 列表初始化
 
+// push_back() 方式插入
+vector<int> vectorList2;
+vectorList2.push_back(35);
+vectorList2.push_back(41);
+vectorList2.push_back(94);
+
+// 获取=
+int i = vectorList.at(1); // 带安全检查
+int j = vectorList[0];    // 不带安全检查
+
+// 迭代器 方式获取 元素=============================
+vector<int>::iterator itr;
+itr = vectorList.begin();
+vectorList.insert(itr, 58);// 表头插入 节点
+itr = vectorList.end();    // 尾部 迭代器 实际上是 一个位置哨兵，实际上不存在
+vectorList.insert(itr, 37);// 表尾插入 节点
+
+itr = vectorList.begin();
+vectorList.insert(itr + 3, 67);//第四个位置插入元素
+
+// 查找元素==========================================
+itr = find (vectorList.begin(), vectorList.end(), 41);
+if (itr != vectorList.end())
+ cout << "Element found in vectorList: " << *itr;
+else
+ cout << "Element not found in vectorList"; // 未找到
+cout << endl << endl;
+
+// 删除第二个元素 ==========================
+itr = vectorList.begin();
+vectorList.erase (itr + 1);
+
+// ===============================================================
+// 双向链表list=========
+
+void PrintLinkedList(const list<int>& llist)
+{
+    for (auto l : llist) // 范围for循环
+    {
+        std::cout << l << " -> "; // 打印每个节点元素
+    }
+    cout << "NULL" << endl;
+}
+
+// 获取指定位置 迭代器====
+list<int>::iterator GetIterator(list<int>::iterator it, int x)
+{
+    for(int i = 0; i < x; ++i, ++it);
+    return it;
+}
+
+    // 初始化一个 list
+    list<int> linkedList;
+
+    // 43->NULL
+    linkedList.push_front(43);
+
+    // 76->43->NULL
+    linkedList.push_front(76);
+
+    // 76->43->15->NULL
+    linkedList.push_back(15);
+
+    // 76->43->15->44->NULL
+    linkedList.push_back(44);
+    
+    // 打印 链表
+    PrintLinkedList(linkedList);
+    
+    //              插入元素=====
+    // 76->43->15->44->100->NULL
+    list<int>::iterator itr = GetIterator(linkedList.begin(), 4);
+    linkedList.insert(itr, 100);
+    
+    // 查找元素====
+    itr = find (linkedList.begin(), linkedList.end(), 15);
+    if (itr != linkedList.end())
+        cout << "Element found in linkedList: " << *itr;
+    else
+        cout << "Element not found in linkedList";
+    cout << endl << endl;
+    
+    // 删除元素====
+    itr = linkedList.begin();
+    linkedList.erase (itr);
+    // 43->15->44->100->NULL
+    
+    
+```
 ## 章3 Stack栈 和 队列Queue===========================
 ### 3.1 Stack栈
 >
