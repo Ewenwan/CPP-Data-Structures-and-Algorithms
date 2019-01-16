@@ -1,5 +1,5 @@
 // Project: Doubly_Linked_List.cbp
-// File   : DoublyLinkedList.h
+// File   : DoublyLinkedList.h 双向链表 有双向节点构成的 双向索引链条
 #ifndef DOUBLYLINKEDLIST_H
 #define DOUBLYLINKEDLIST_H
 
@@ -9,43 +9,42 @@
 template <typename T>
 class DoublyLinkedList
 {
-    private:
-        int m_count;
+    private: // 私有数据
+        int m_count;// 双向节点 数量记录
 
     public:
-        // The first node in the list
-        // or null if empty
+        // 双向链表头
         DoublyNode<T> * Head;
 
-        // The last node in the list
-        // or null if empty
+        // 双向链表尾
         DoublyNode<T> * Tail;
 
-        // Constructor
+        // 构造函数===========
         DoublyLinkedList();
 
-        // Get() operation
+        // 获取指定索引上的双向节点 Get() operation
         DoublyNode<T> * Get(int index);
 
-        // Insert() operation
-        void InsertHead(T val);
-        void InsertTail(T val);
-        void Insert(int index, T val);
+        // 双向链表插入操作 Insert() operation
+        void InsertHead(T val);// 表头插入
+        void InsertTail(T val);// 表尾插入
+        void Insert(int index, T val);// 普通插入函数
 
-        // Search() operation
+        //查找数据信息 Search() operation
         int Search(T val);
 
-        // Remove() operation
+        // 双向链表删除节点操作 Remove() operation
         void RemoveHead();
         void RemoveTail();
         void Remove(int index);
 
-        // Additional operation
-        int Count();
-        void PrintList();
-        void PrintListBackward();
+        // 附加操作 Additional operation
+        int Count();       // 计数 
+        void PrintList();  // 正向打印 双向链表
+        void PrintListBackward();// 反向打印 双向链表
 };
 
+// 构造函数=========== DoublyLinkedList<T>:: 前置 所有关系
 template <typename T>
 DoublyLinkedList<T>::DoublyLinkedList()
     : m_count(0), Head(NULL), Tail(NULL) {}
@@ -53,46 +52,41 @@ DoublyLinkedList<T>::DoublyLinkedList()
 template <typename T>
 DoublyNode<T> * DoublyLinkedList<T>::Get(int index)
 {
-    // Check if the index is out of bound
+    // 指定位置索引 范围检查
     if(index < 0 || index > m_count)
         return NULL;
 
-    // Start from the Head
+    // 从头结点开始遍历
     DoublyNode<T> * node = Head;
 
-    // Iterate through the linked list elements
-    // until it finds the selected index
+    // 遍历到指定 index处
     for(int i = 0; i < index; ++i)
     {
-        node = node->Next;
+        node = node->Next; // 0,...,index-1
     }
 
     // Simply return the node result
     return node;
 }
 
+// 表头插入节点
 template <typename T>
 void DoublyLinkedList<T>::InsertHead(T val)
 {
-    // Create a new Node
+    // 新建节点
     DoublyNode<T> * node = new DoublyNode<T>(val);
 
-    // The current Head will no longer become a Head
-    // so the Next pointer of the new Node will
-    // point to the current Head
+    // 新节点的后继 指向原 链表表头
     node->Next = Head;
 
-    // If the current Head is exist,
-    // the previous pointer of the current Head
-    // should point to the node
+    // 如果原 头结点存在，则原头结点的 前继 需要指向 新节点(作为新表头)
     if(Head != NULL)
         Head->Previous = node;
 
-    // The new Node now become the Head
+    // 新节点 重置为 链表表头
     Head = node;
 
-    // If the linked list is empty
-    // The Tail is also the Head
+    // 如果链表中只有一个节点，那么 表尾 == 表头
     if(m_count == 0)
         Tail = Head;
 
