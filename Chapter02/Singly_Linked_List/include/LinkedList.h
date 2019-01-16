@@ -1,49 +1,50 @@
 // Project: Singly_Linked_List.cbp
-// File   : LinkedList.h
+// File   : LinkedList.h   链表实现，比 节点链 多一些功能==
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
 #include <iostream>
-#include "Node.h"
+#include "Node.h"   // 单个模板节点
 
+// 模板链表==================
 template <typename T>
 class LinkedList
 {
 private:
-    int m_count;
+    int m_count; // 实际节点数量
 
 public:
-    // The first node in the list
-    // or null if empty
-    Node<T> * Head;
+    // The first node in the list or null if empty
+    Node<T> * Head; // 链表表头节点
 
-    // The last node in the list
-    // or null if empty
-    Node<T> * Tail;
+    // The last node in the list or null if empty
+    Node<T> * Tail; // 链表表尾节点
 
-    // Constructor
+    // 类构造函数 Constructor
     LinkedList();
 
-    // Get() operation
+    // 获取第 index 个 节点 Get() operation
     Node<T> * Get(int index);
 
-    // Insert() operation
-    void InsertHead(T val);
-    void InsertTail(T val);
-    void Insert(int index, T val);
+    // 在链表中 插入节点 的操作===Insert() operation
+    void InsertHead(T val);// 头部插入节点
+    void InsertTail(T val);// 尾部插入节点
+    void Insert(int index, T val);// 其他中间插入节点
 
-    // Search() operation
+    // 在链表中查找指定的值 Search() operation
     int Search(T val);
 
-    // Remove() operation
-    void RemoveHead();
-    void RemoveTail();
-    void Remove(int index);
+    // 删除节点的操作 ==Remove() operation===
+    void RemoveHead();// 去除表头节点
+    void RemoveTail();// 去除表尾节点
+    void Remove(int index);// 去 链条中的中间节点
 
-    // Additional operation
-    int Count();
-    void PrintList();
+    // 附加操作======
+    int Count();     // 节点数量 统计
+    void PrintList();// 打印链表中的每一个节点的信息====
 };
+
+// 类 方法的实现方法 直接在 头文件中实现，比放在另一个cpp文件中好======
 
 template <typename T>
 LinkedList<T>::LinkedList() : m_count(0), Head(NULL), Tail(NULL) {}
