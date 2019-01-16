@@ -314,11 +314,13 @@ cout << " of " << GetSuitString(suit) << endl;//card.suit
 ```
 
 ### 1.2 抽象数据结构 abstract data type class类实现
-    一种包含 变量和方法的 容器 或者 集合
-    成员数学：
+    一种包含 变量和方法的 容器 或者 集合。
+    
+    成员属性：
         1. public 公开的，数据和方法可以被所有使用者访问
         2. protected 保护的，数据和方法，可以被 类自己、类的继承者(子代)、类的朋友(同辈) 访问
         3. private   私有的，数据和方法，可以被 类自己、类的朋友(同辈) 访问
+        
     struct 默认为 public属性，推荐 使用struct定义 数据集合，不包括方法
     class  默认为 private属性
 
