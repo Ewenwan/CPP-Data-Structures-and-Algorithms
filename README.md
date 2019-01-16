@@ -968,7 +968,7 @@ public: // 公开方法====
     // 在链表中 插入节点 的操作===Insert() operation
     void InsertHead(T val);// 头部插入节点
     void InsertTail(T val);// 尾部插入节点
-    void Insert(int index, T val);// 其他中间插入节点
+    void Insert(int index, T val);// 插入节点
 
     // 在链表中查找指定的值 Search() operation
     int Search(T val);
@@ -976,7 +976,7 @@ public: // 公开方法====
     // 删除节点的操作 ==Remove() operation===
     void RemoveHead();// 去除表头节点
     void RemoveTail();// 去除表尾节点
-    void Remove(int index);// 去 链条中的中间节点
+    void Remove(int index);// 去 链条中的节点
 
     // 附加操作======
     int Count();     // 节点数量 统计
@@ -985,20 +985,283 @@ public: // 公开方法====
 
 // 类 方法的实现方法 直接在 头文件中实现，比放在另一个cpp文件中好=========
 
+//=================================================
+//     head             ...                tail
+//index  0               1                  2
+// +------+------+  +------+------+  +------+------+
+// | 4.93 |   +---->| 6.45 |   +---->| 8.17 | NULL |
+// +------+------+  +------+------+  +------+------+
+//   前置节点            目标节点          后置节点
+//   prevNode             node            nextNode
+//   对目标索引位置 进行 插入/删除 操作时，先找到 目标节点及其前后位置的 前置节点 和 后置节点
+//=================================================
+
+// 头部插入节点=======================
+template <typename T>
+void LinkedList<T>::InsertHead(T val)
+{
+    // 新建一个节点====================
+    Node<T> * node = new Node<T>(val);
+    // 新节点的后继 指向原首节点 
+    node->Next = Head;
+    // 新节点重置为 首节点
+    Head = node;
+
+    // 仅有一个节点时，尾节点==首节点
+    if(m_count == 0)
+        Tail = Head;
+
+    // One element is added
+    m_count++;
+}
+
+// 尾部插入节点=======================
+template <typename T>
+void LinkedList<T>::InsertTail(T val)
+{
+    // 链表为空时，和从头部插入节点一致===
+    if(m_count == 0)
+    {
+        InsertHead(val);
+        return;
+    }
+    
+    // 新建一个节点
+    Node<T> * node = new Node<T>(val);
+    // 原链表的后继 设置为 新节点
+    Tail->Next = node;
+    // 新节点重置为 尾节点 
+    Tail = node;
+
+    // 数量++
+    m_count++;
+}
+
+// 在指定位置处插入节点======================
+template <typename T>
+void LinkedList<T>::Insert(int index, T val)
+{
+    // 检查位置index的合理性=
+    if(index < 0 || index > m_count)
+        return;
+
+    // 头部插入的情况=========
+    if(index == 0)
+    {
+        InsertHead(val);
+        return;// 直接返回
+    }
+    // 尾部插入的情况=========
+    else if(index == m_count)
+    {
+        InsertTail(val);
+        return;// 直接返回
+    }
+
+    // 链条中间插入 节点的情况===
+    // 从首节点开始 遍历到 指定位置处的 前一个节点 (找到前置节点)
+    Node<T> * prevNode = Head;
+    // 找到 前置节点============  断开处的 前端
+    for(int i = 0; i < index - 1; ++i)
+    {
+        prevNode = prevNode->Next;
+    }
+
+    // 指定位置的(后置节点)====  断开处的 后端
+    Node<T> * nextNode = prevNode->Next;
+    
+    // 创建一个新节点==================
+    Node<T> * node = new Node<T>(val);
+    // 新节点后继 指向 后置节点
+    node->Next = nextNode;
+    // 前置节点 后继 指向 新节点
+    prevNode->Next = node;
+
+    // 数量++
+    m_count++;
+}
+
+// 去除头部节点======================
+template <typename T>
+void LinkedList<T>::RemoveHead()
+{
+    // 链表 是否为空 检查
+    if(m_count == 0)
+        return;
+
+    // 原 头部节点
+    Node<T> * node = Head;
+    // 原 头部节点的后继作为 新 首节点
+    Head = Head->Next;
+    // 删除原首节点
+    delete node;
+    
+    // 仅有一个节点时，尾节点==首节点====
+    if(m_count == 1)
+        Tail = Head;//  新添加=========修复bug=====
+    
+    // 数量--
+    m_count--;
+}
+
+// 去除尾部节点=========================
+template <typename T>
+void LinkedList<T>::RemoveTail()
+{
+    // 链表 是否为空 检查
+    if(m_count == 0)
+        return;
+
+    // 当链表数量为1时，和去除头部节点一致
+    if(m_count == 1)
+    {
+        RemoveHead();
+        return;
+    }
+
+    // 从头节点开始，遍历到尾节点 的 前置节点，因为不能反向遍历，所以需要从头部向后遍历
+    Node<T> * prevNode = Head;
+    // 需要删除的节点
+    Node<T> * node = Head->Next;
+
+    // 遍历 找到指定的两个节点
+    while(node->Next != NULL)// 注意是 需要删除的节点 的后继 不为 NULL
+    {
+        prevNode = prevNode->Next;// 前置节点
+        node = node->Next;        // 需要删除的节点，即原 尾节点
+    }
+
+    // 原尾节点的 前置节点 需要 变成 新的 尾节点
+    prevNode->Next = NULL; // 尾节点的后继 为 NULL
+    Tail = prevNode;       // 前置节点 重置为  尾节点
+    // 删除原 尾节点
+    delete node;
+
+    // 数量--
+    m_count--;
+}
+
+// 删除指定索引位置的 节点
+template <typename T>
+void LinkedList<T>::Remove(int index)
+{
+    // 链表 是否为空 检查============
+    if(m_count == 0)
+        return;
+
+    // 检查指定位置是否合理===========
+    if(index < 0 || index >= m_count)
+        return;
+
+    // 删除头部的节点=============
+    if(index == 0)
+    {
+        RemoveHead();
+        return;// 直接返回 
+    }
+    //删除尾部的节点==============
+    else if(index == m_count - 1)
+    {
+        RemoveTail();
+        return;// 直接返回 
+    }
+
+    // 从 头部节点 开始 遍历
+    Node<T> * prevNode = Head;
+
+    // 找到指定 索引 前面的 前置节点
+    for(int i = 0; i < index - 1; ++i)// 到index-2
+    {
+        prevNode = prevNode->Next;  // 前置节点 index-2 位置
+    }
+
+    // 指定节点
+    Node<T> * node = prevNode->Next;// index-1 位置
+    // 后置节点
+    Node<T> * nextNode = node->Next;// index 位置 从0开始
+    // 前置节点 的后继 设置为后置节点 跳过中间的 指定删除的节点
+    prevNode->Next = nextNode;
+    // 删除指定节点
+    delete node;
+
+    // 数量--
+    m_count--;
+}
 
 
 
+// 使用=================================================
+// NULL  创建一个空 链表 传入模板类型============
+LinkedList<int> linkedList = LinkedList<int>();
+
+// 头部插入======================
+// 43->NULL
+linkedList.InsertHead(43);
+
+// 76->43->NULL
+linkedList.InsertHead(76);
+
+// 尾部插入======================
+// 76->43->15->NULL
+linkedList.InsertTail(15);
+
+// 76->43->15->44->NULL
+linkedList.InsertTail(44);
+
+// 中间插入======================
+// 76->43->15->44->100->NULL
+linkedList.Insert(4, 100);
+
+// 76->43->15->48->44->100->NULL
+linkedList.Insert(3, 48);
+
+// 22->76->43->15->48->44->100->NULL
+linkedList.Insert(0, 22); 
+
+// 删除节点=====================
+linkedList.Remove(0);// Remove first element
+// 76->43->15->48->44->100->NULL
+linkedList.Remove(4);// Remove fifth element
+// 76->43->15->48->100->NULL
+linkedList.Remove(9);// Remove tenth element
+// Nothing happen
+// 76->43->15->48->100->NULL 
 
 ```
 
-
 ### 2.5 双向链表
->
+>双向节点 带有 前继和后继 节点指针 DoublyNode.h
+```c
+// DoublyNode.h
+// 双向节点 带有 前继和后继 节点指针
+template <typename T>
+class DoublyNode
+{
+// +----------+---------+---------+   
+// Pre <------|  Value  | ---> Next
+// +----------+---------+---------+  
+    public:
+        T Value; // 节点存储的信息，模板数据类型
+        DoublyNode<T> * Previous; // 前继 节点指针
+        DoublyNode<T> * Next;     // 后继 节点指针
+        
+        // 类对象 构造函数 声明
+        DoublyNode(T value);      
+};
+
+// 类对象 构造函数 实现 
+template <typename T>
+DoublyNode<T>::DoublyNode(T value)
+    // 值，前继和后继 节点指针 为NULL
+    : Value(value), Previous(NULL), Next(NULL) {}
+```
+
+> 双向链表 有双向节点构成的 双向索引链条  在插入/删除节点时需要考虑 设置前继和后继节点的指针
 ```c
 
 
-
 ```
+
 
 ## 章3 Stack栈 和 队列Queue===========================
 ### 3.1 Stack栈
