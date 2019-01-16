@@ -914,11 +914,79 @@ void PrintNode(Node<T> * node)// 传入节点指针
 
 ```
 
-
-
 ### 2.4 单向链表
 >
 ```c
+// File   : Node.h 链表中的 单一节点实现，模板节点，可存储许多类型数据=================
+#ifndef NODE_H
+#define NODE_H
+
+#include <iostream>
+
+// 模板节点，可存储许多类型数据
+template <typename T>
+class Node
+{
+public:
+    T Value;
+    Node<T> * Next;
+    // 类 构造函数 声明
+    Node(T value);
+};
+
+// 类构造函数实现
+// 拿到外面的话，就需要在函数前面添加 Node<T>:: 类名属性
+template <typename T>
+Node<T>::Node(T value) : Value(value), Next(NULL) {}
+
+#endif // NODE_H
+
+//==================================================
+// File   : LinkedList.h   链表实现，比 节点链 多一些功能===========================
+#include "Node.h"   // 单个模板节点
+
+// 模板链表==================
+template <typename T>
+class LinkedList
+{
+private: // private 私有变量===
+    int m_count; // 实际节点数量
+
+public: // 公开方法====
+    // The first node in the list or null if empty
+    Node<T> * Head; // 链表表头节点
+
+    // The last node in the list or null if empty
+    Node<T> * Tail; // 链表表尾节点
+
+    // 类构造函数 Constructor
+    LinkedList();
+
+    // 获取第 index 个 节点 Get() operation
+    Node<T> * Get(int index);
+
+    // 在链表中 插入节点 的操作===Insert() operation
+    void InsertHead(T val);// 头部插入节点
+    void InsertTail(T val);// 尾部插入节点
+    void Insert(int index, T val);// 其他中间插入节点
+
+    // 在链表中查找指定的值 Search() operation
+    int Search(T val);
+
+    // 删除节点的操作 ==Remove() operation===
+    void RemoveHead();// 去除表头节点
+    void RemoveTail();// 去除表尾节点
+    void Remove(int index);// 去 链条中的中间节点
+
+    // 附加操作======
+    int Count();     // 节点数量 统计
+    void PrintList();// 打印链表中的每一个节点的信息====
+};
+
+// 类 方法的实现方法 直接在 头文件中实现，比放在另一个cpp文件中好=========
+
+
+
 
 
 ```
