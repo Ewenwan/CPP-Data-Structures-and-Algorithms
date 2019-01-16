@@ -1,5 +1,5 @@
 // Project: Doubly_Linked_List.cbp
-// File   : DoublyLinkedList.h 双向链表 有双向节点构成的 双向索引链条
+// File   : DoublyLinkedList.h 双向链表 有双向节点构成的 双向索引链条 在插入/删除节点时需要考虑 设置前继和后继节点的指针
 #ifndef DOUBLYLINKEDLIST_H
 #define DOUBLYLINKEDLIST_H
 
@@ -42,6 +42,7 @@ class DoublyLinkedList
         int Count();       // 计数 
         void PrintList();  // 正向打印 双向链表
         void PrintListBackward();// 反向打印 双向链表
+        // 从尾节点 依次找 前继节点 反向遍历链表==
 };
 
 // 构造函数=========== DoublyLinkedList<T>:: 前置 所有关系
@@ -69,16 +70,16 @@ DoublyNode<T> * DoublyLinkedList<T>::Get(int index)
     return node;
 }
 
-// 表头插入节点
+// 表头插入节点==================================
 template <typename T>
 void DoublyLinkedList<T>::InsertHead(T val)
 {
     // 新建节点
     DoublyNode<T> * node = new DoublyNode<T>(val);
-
+    
+    // 连接处 互相指向===========each other======
     // 新节点的后继 指向原 链表表头
     node->Next = Head;
-
     // 如果原 头结点存在，则原头结点的 前继 需要指向 新节点(作为新表头)
     if(Head != NULL)
         Head->Previous = node;
@@ -94,80 +95,72 @@ void DoublyLinkedList<T>::InsertHead(T val)
     m_count++;
 }
 
+// 表尾插入节点=============================
 template <typename T>
 void DoublyLinkedList<T>::InsertTail(T val)
 {
-    // If the linked list is empty,
-    // just simply invoke InsertHead()
+    // 链表为空时，和表头插入一致
     if(m_count == 0)
     {
         InsertHead(val);
         return;
     }
 
-    // Create a new Node
+    // 新建一个节点
     DoublyNode<T> * node = new DoublyNode<T>(val);
-
-    // The current Tail will no longer become a Tail
-    // so the Next pointer of the current Tail will
-    // point to the new node
+    // 原尾节点 的 后继 设置为 新节点  // 注意需要双向关联
     Tail->Next = node;
-
-    // Also, the previous pointer of the new node
-    // should point to the current Tail
+    // 新节点的 前继 设置为 原尾节点
     node->Previous = Tail;
-
-    // The new Node now become the Tail
+    // 新节点 重置为 链表的 尾节点
     Tail = node;
 
-    // One element is added
+    // 数量++
     m_count++;
 }
 
 template <typename T>
 void DoublyLinkedList<T>::Insert(int index, T val)
 {
-    // Check if the index is out of bound
+    // 插入位置 范围检查
     if(index < 0 || index > m_count)
         return;
 
-    // If inserting a new Head
+    // 在头部插入====
     if(index == 0)
     {
         InsertHead(val);
         return;
     }
-    // If inserting a new Tail
+    // 在尾部插入=====
     else if(index == m_count)
     {
         InsertTail(val);
         return;
     }
 
-    // Start to find previous node
-    // from the Head
+    // 目标位置的 前置节点
     DoublyNode<T> * prevNode = Head;
 
-    // Traverse the elements until
-    // the selected index is found
+    // 遍历到 前置节点
     for(int i = 0; i < index - 1; ++i)
     {
-        prevNode = prevNode->Next;
+        prevNode = prevNode->Next; // 0,...,index-2
     }
 
-    // Create the next node which is
-    // the element after previous node
-    DoublyNode<T> * nextNode = prevNode->Next;
+    // 后置节点 
+    DoublyNode<T> * nextNode = prevNode->Next;//0,...,index-1
 
-    // Create a new node
+    // 创建一个新的节点
     DoublyNode<T> * node = new DoublyNode<T>(val);
 
-    // Insert this new node between
-    // the previous node and the next node
-    node->Next = nextNode;
-    node->Previous = prevNode;
-    prevNode->Next = node;
-    nextNode->Previous = node;
+    // 需要重新设置4个指向======
+    // prevNode----> node ------>nextNode
+    // prevNode<---- node <----- nextNode
+    node->Next = nextNode;     // 1.               node ------>nextNode
+    node->Previous = prevNode; // 2. prevNode<---- node
+    prevNode->Next = node;     // 3. prevNode----> node
+    nextNode->Previous = node; // 4.               node <----- nextNode
 
     // One element is added
     m_count++;
@@ -176,28 +169,23 @@ void DoublyLinkedList<T>::Insert(int index, T val)
 template <typename T>
 int DoublyLinkedList<T>::Search(T val)
 {
-    // If LinkedList is empty,
-    // just return NOT_FOUND
+    // 链表为空
     if(m_count == 0)
         return -1;
 
-    // Need to count the index
+    // 找到的位置
     int index = 0;
 
-    // Traverse from the Head node
+    // 从头结点开始遍历
     DoublyNode<T> * node = Head;
 
-    // Traverse until the selected value
-    // is matched with the value
-    // of the current position,
+    // 找到指定值
     while(node->Value != val)
     {
         index++;
         node = node->Next;
 
-        // This will happen
-        // if the selected value
-        // is not found
+        // 直到找到 链表尾部
         if(node == NULL)
         {
             return -1;
@@ -214,25 +202,20 @@ void DoublyLinkedList<T>::RemoveHead()
     if(m_count == 0)
         return;
 
-    // Save the current Head
-    // to a new node
+    // 原 链表头
     DoublyNode<T> * node = Head;
 
-    // Point the Head Pointer
-    // to the element next to the current Head
+    // 原 链表头后继 设置为 新链表头
     Head = Head->Next;
 
-    // Now it's safe to remove
-    // the first element
+    // 删除原链表头
     delete node;
 
-    // If there's still any element in the list,
-    // the previous pointer of the Head
-    // should point to NULL
+    // 设置 表头前置 节点为 NULL
     if(Head != NULL)
         Head->Previous = NULL;
 
-    // One element is removed
+    // 数量--
     m_count--;
 }
 
@@ -251,24 +234,19 @@ void DoublyLinkedList<T>::RemoveTail()
         return;
     }
 
-    // Save the current Tail
-    // to a new node
+    // 原表尾节点
     DoublyNode<T> * node = Tail;
 
-    // Point the Tail Pointer
-    // to the element before the current Tail
+    // 可以反向遍历 找到 原表尾节点的 前置节点，并设置为 新的表尾节点
     Tail = Tail->Previous;
 
-    // Set the new Next pointer of the new Tail
-    // to NULL since we are going to delete
-    // the last element
+    // 表尾节点的后继设置为 NULL
     Tail->Next = NULL;
 
-    // Now it's safe to remove
-    // the last element
+    // 删除原 链表表尾节点
     delete node;
 
-    // One element is removed
+    // 数量--
     m_count--;
 }
 
@@ -296,34 +274,27 @@ void DoublyLinkedList<T>::Remove(int index)
         return;
     }
 
-    // Start to traverse the list
-    // from the Head
+    // 指定位置 的 前置节点
     DoublyNode<T> * prevNode = Head;
-
-    // Find the element before
-    // the selected index
     for(int i = 0; i < index - 1; ++i)
     {
-        prevNode = prevNode->Next;
+        prevNode = prevNode->Next; // 0,...,index-2
     }
+    // 需要删除的 目标节点
+    DoublyNode<T> * node = prevNode->Next; // 0,...,index-1
 
-    // The removed element is after
-    // the prevNode
-    DoublyNode<T> * node = prevNode->Next;
+    // 目标节点 后  的 后置节点
+    DoublyNode<T> * nextNode = node->Next; // 0,...,index
 
-    // The nextNode will be the neighbor of
-    // prevNode if the node is removed
-    DoublyNode<T> * nextNode = node->Next;
+    // 新增两个指向   前置节点 ---->  后置节点
+    //               前置节点 <----  后置节点
+    prevNode->Next = nextNode;     // 前置节点 ---->  后置节点
+    nextNode->Previous = prevNode; // 前置节点 <----  后置节点
 
-    // Link the prevNode to nextNode
-    prevNode->Next = nextNode;
-    nextNode->Previous = prevNode;
-
-    // It's now safe to remove
-    // the selected index element
+    // 删除目标节点
     delete node;
 
-    // One element is removed
+    // 数量--
     m_count--;
 }
 
@@ -350,6 +321,7 @@ void DoublyLinkedList<T>::PrintList()
 template <typename T>
 void DoublyLinkedList<T>::PrintListBackward()
 {
+    // 从尾节点 依次找 前继节点 反向遍历链表==
     DoublyNode<T> * node = Tail;
 
     while(node != NULL)
