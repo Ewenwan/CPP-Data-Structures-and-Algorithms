@@ -1602,8 +1602,13 @@ list<int>::iterator GetIterator(list<int>::iterator it, int x)
 ```
 ## 章3 Stack栈 和 队列Queue===========================
 ### 3.1 Stack栈
+    一种 插入 和 删除 操作只能在一端( 栈顶Top() )进行的 容器
+    是一种 后进先出(Last In First Out, LIFO) 的数据结构
+    
 >
 ```c
+
+
 ```
 ### 3.2 队列Queue
 >
