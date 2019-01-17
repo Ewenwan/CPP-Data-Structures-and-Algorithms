@@ -1,5 +1,5 @@
 // Project: Deque.cbp
-// File   : Deque.h
+// File   : Deque.h 双端队列 Double Queue 可以从两端进行插入和删除操作 双向节点构成
 #ifndef DEQUE_H
 #define DEQUE_H
 
@@ -9,19 +9,19 @@ template <typename T>
 class Deque
 {
 private:
-    int m_count;
-    DoublyNode<T> * m_front;
-    DoublyNode<T> * m_back;
+    int m_count; // 数量
+    DoublyNode<T> * m_front;// 队首节点指针  双向节点
+    DoublyNode<T> * m_back; // 队尾节点指针
 
 public:
     Deque();
     bool IsEmpty();
     T Front();
     T Back();
-    void EnqueueFront(T val);
-    void EnqueueBack(T val);
-    void DequeueFront();
-    void DequeueBack();
+    void EnqueueFront(T val); // 队首插入元素
+    void EnqueueBack(T val);  // 队尾插入元素
+    void DequeueFront();      // 队首删除元素
+    void DequeueBack();       // 队尾删除元素
 };
 
 template <typename T>
