@@ -2,7 +2,7 @@
 // File   : Queue.h
 //一种只能从一端插入元素，从另一端删除元素的 容器
 // First In First Out(FIFO) 先入先出 队列
-///现实世界中的 排队，打印机队列...都是队列的实例
+//  现实世界中的 排队，打印机队列...都是队列的实例  队首----->...---->首尾--->新节点
 #ifndef QUEUE_H
 #define QUEUE_H
 
@@ -24,77 +24,66 @@ public:
     void Dequeue();      // 从队首 删除元素
 };
 
+// 构造函数====
 template <typename T>
 Queue<T>::Queue() : m_count(0), m_front(NULL), m_back(NULL) {}
 
 template <typename T>
 bool Queue<T>::IsEmpty()
 {
-    // return TRUE if there's at least one item
-    // otherwise, return FALSE
+    // 为空? 节点数量<=0
     return m_count <= 0;
 }
 
 template <typename T>
 T Queue<T>::Front()
 {
-    // Just return the value
-    // of m_front node
+    // 队首节点 元素
     return m_front->Value;
 }
 
+// 队尾插入元素
 template <typename T>
 void Queue<T>::Enqueue(T val)
 {
-    // Create a new Node
+    // 新建一个节点
     Node<T> * node = new Node<T>(val);
 
     if(m_count == 0)
     {
-        // If the queue is empty
-        // the new node will be
-        // m_front and m_back
+        // 为空时，新建的一个节点 即为队首也为队尾节点===
         node->Next = NULL;
         m_front = node;
         m_back = m_front;
     }
     else
     {
-        // If there's at least one element
-        // in the queue, the current m_back element
-        // won't be the Back element anymore
-        // so the Next pointer of the current m_back
-        // point to the new node
+        // 队首----->...---->首尾--->新节点
         m_back->Next = node;
-
-        // The new Node now become the Back position
+        // 新节点变成 新 队尾
         m_back = node;
     }
 
-    // One element is added
+    // 数量++
     m_count++;
 }
 
+// 队首删除元素
 template <typename T>
 void Queue<T>::Dequeue()
 {
-    // Do nothing if list is empty
+    // 空
     if(m_count == 0)
         return;
 
-    // Save the current Front
-    // to a new node
+    // 原队首节点
     Node<T> * node = m_front;
-
-    // Point the Front pointer
-    // to the element next to the current Front
+    // 原队首节点的后继 设置为 新队首
     m_front = m_front->Next;
-
-    // Now it's safe to remove
-    // the first element
+    // 删除 原队首节点
     delete node;
 
-    // One element is removed
+    // 数量--
     m_count--;
 }
 
