@@ -1,5 +1,8 @@
 // Project: Queue.cbp
 // File   : Queue.h
+//一种只能从一端插入元素，从另一端删除元素的 容器
+// First In First Out(FIFO) 先入先出 队列
+///现实世界中的 排队，打印机队列...都是队列的实例
 #ifndef QUEUE_H
 #define QUEUE_H
 
@@ -9,16 +12,16 @@ template <typename T>
 class Queue
 {
 private:
-    int m_count;
-    Node<T> * m_front;
-    Node<T> * m_back;
+    int m_count; // 节点数量
+    Node<T> * m_front; // 前端节点(队首) 指针 删除元素入口
+    Node<T> * m_back;  // 后端节点(队尾) 指针 插入元素入口
 
 public:
-    Queue();
-    bool IsEmpty();
-    T Front();
-    void Enqueue(T val);
-    void Dequeue();
+    Queue();// 构造函数
+    bool IsEmpty();// 为空检查
+    T Front();     // 获取 队首 元素
+    void Enqueue(T val); // 从队尾 插入元素
+    void Dequeue();      // 从队首 删除元素
 };
 
 template <typename T>
