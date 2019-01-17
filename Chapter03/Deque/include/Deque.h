@@ -18,10 +18,10 @@ public:
     bool IsEmpty();
     T Front();
     T Back();
-    void EnqueueFront(T val); // 队首插入元素
-    void EnqueueBack(T val);  // 队尾插入元素
-    void DequeueFront();      // 队首删除元素
-    void DequeueBack();       // 队尾删除元素
+    void EnqueueFront(T val); // 队首插入元素 新节点后继指向原队首，原队首前继指向新节点，新节点作为新队首  
+    void EnqueueBack(T val);  // 队尾插入元素 原队尾后继指向新节点  新节点前继指向原队尾，新节点作为新队尾
+    void DequeueFront();      // 队首删除元素 保存旧队首，旧队首后继作为新队首，新队首前继指向NULL，删除旧队首
+    void DequeueBack();       // 队尾删除元素 保存旧队尾，旧队尾前继作为新队尾，新队尾后继指向NULL，删除旧队尾
 };
 
 template <typename T>
