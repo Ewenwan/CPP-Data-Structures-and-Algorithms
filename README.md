@@ -1601,19 +1601,171 @@ list<int>::iterator GetIterator(list<int>::iterator it, int x)
     
 ```
 ## 章3 Stack栈 和 队列Queue===========================
-### 3.1 Stack栈
+
+### 3.1 Stack栈  叠起来的 碗，放在一摞的书...都是栈的实例...
     一种 插入 和 删除 操作只能在一端( 栈顶Top() )进行的 容器
     是一种 后进先出(Last In First Out, LIFO) 的数据结构
-    
+![](https://github.com/Ewenwan/CPP-Data-Structures-and-Algorithms/blob/master/fig/stack.PNG)
+
 >
 ```c
+// Stack.h =========================
+template <typename T> // 模板类型
+class Stack
+{
+private:   // 私有数据
+ int m_count;// 熟练
+ Node<T> * m_top; // 栈顶指针
+ 
+ 
+public: // 公开
+ Stack();       // 类构造函数
+ bool IsEmpty();// 空检查
+ T Top();       // 获取栈顶元素
+ void Push(T val);// 栈顶插入元素
+ void Pop();      // 弹出栈顶元素
+};
 
+// 获取栈顶元素=======
+template <typename T>
+T Stack<T>::Top()
+{
+ // Just return the value of m_top node
+ return m_top->Value;
+}
+
+// 空检查===============
+template <typename T>
+bool Stack<T>::IsEmpty()
+{
+ // return TRUE if there are no items
+ // otherwise, return FALSE
+ return m_count <= 0;
+}
+
+// 栈顶插入元素===========
+template <typename T>
+void Stack<T>::Push(T val)
+{
+ // 创建一个新节点
+ Node<T> * node = new Node<T>(val);
+ // 新节点的 后继 指向 原 栈顶节点
+ node->Next = m_top;
+ // 新节点 重置为 新栈顶节点
+ m_top = node;
+ // 数量++
+ m_count++;
+}
+
+// 弹出栈顶元素===========
+template <typename T>
+void Stack<T>::Pop()
+{
+ // 空栈直接返回
+ if(IsEmpty())
+      return;
+ // 旧栈顶节点，待删除
+ Node<T> * node = m_top;
+ // 旧栈顶节点的后继 设置为 新栈顶节点
+ m_top = m_top->Next;
+ // 删除原 旧栈顶节点
+ delete node;
+ // 数量--
+ m_count--;
+}
+
+// 使用===============
+ // 初始化一个空栈 NULL
+ Stack<int> stackInt = Stack<int>();
+ // Store several numbers to the stack
+ stackInt.Push(32);
+ stackInt.Push(47);
+ stackInt.Push(18);
+ stackInt.Push(59);
+ stackInt.Push(88);
+ stackInt.Push(91);
+ // 32->47->18->59->88->91|
+ while(!stackInt.IsEmpty())
+ {
+ // 打印栈顶 节点 信息
+ cout << stackInt.Top() << " ->";
+ // 删除栈顶节点
+ stackInt.Pop();
+ }
+ cout << "END" << endl;
 
 ```
+
+> 栈典型应用  括号匹配 { ( ) [ { } ] }
+
+    { ( ) [ { } ] }
+    1. 遇到左括号 入栈
+    2. 遇到右括号 检查 栈顶值 符号是否匹配，若匹配则对应左括号出栈
+    3. 最后 符号字符串读完，左括号栈 为空，则该符号串有效
+```c
+bool IsValid (char expression[])
+{
+ int n = strlen(expression);
+ Stack<char> stackChar = Stack<char>(); // 左符号 栈
+ for (int i = 0; i < n; ++i)
+ {
+     // 遇到左符号 入栈
+     if(expression[i] == '{')
+     {
+         stackChar.Push('{');
+     }
+     else if(expression[i] == '[')
+     {
+         stackChar.Push('[');
+     }
+     else if(expression[i] == '(')
+     {
+         stackChar.Push('(');
+     }
+     // 遇到右括号
+     else if ( expression[i] == '}' ||
+               expression[i] == ']' ||
+               expression[i] == ')')
+     {
+         // 
+         if(expression[i] == '}' &&
+         (stackChar.IsEmpty() || stackChar.Top() != '{'))
+             // 对应 右 } 应该匹配 { 否者 该字符串 非法
+             return false;
+         else if(expression[i] == ']' &&
+         (stackChar.IsEmpty() || stackChar.Top() != '['))
+             return false;
+         else if(expression[i] == ')' &&
+         (stackChar.IsEmpty() || stackChar.Top() != '('))
+             return false;
+         // 对应匹配的 左符号出栈======
+         else
+             stackChar.Pop();
+     }
+ }
+ 
+ // 字符串遍历完后，左括号栈 为空，说明所有左右符号已经全部匹配，该字符串合法
+ if (stackChar.IsEmpty())
+     return true; //
+ else
+     return false;
+}
+```
+
 ### 3.2 队列Queue
->
+    
+    一种只能从一端插入元素，从另一端删除元素的 容器
+    First In First Out(FIFO) 先入先出 队列
+    现实世界中的 排队，打印机队列...都是队列的实例
+
+![](https://github.com/Ewenwan/CPP-Data-Structures-and-Algorithms/blob/master/fig/queue.PNG)
+> 先入先出 队列
 ```c
+
+
+
 ```
+
 ### 3.3 双端队列 Double Queue
 >
 ```c
