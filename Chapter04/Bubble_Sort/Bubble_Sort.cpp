@@ -1,40 +1,41 @@
 // Project: Bubble_Sort.cbp
 // File   : Bubble_Sort.cpp
-
+// 每次从剩余序列中找出最大值，最大值依次交换到最右端
+//  改进1：其中如果未发送交换则序列已经有序，可提前结束
+//  改进2：其中每次的变量交换找最大值 只需要遍历到 上次变量中最后一个交换的位置(该部分已经有序)，跳过已经有序的部分
 #include <iostream>
 
 using namespace std;
 
 void BubbleSort(int arr[], int arrSize)
 {
-    // Flag for swapping element
+    // 是否有序标志
     bool isSwapped;
-
-    // The value will be decreased
-    // every time one element has been sorted
+    int SwapIndex;
+    // 未排序元素数量
     int unsortedElements = arrSize;
     do
     {
-        // If there's at least two element are swapped
-        // it will be true
+        // 是否发生交换的标志
         isSwapped = false;
-
+        SwapIndex=0;
         // Iterate through the array's element
         for(int i = 0; i < unsortedElements - 1; ++i)
         {
             if (arr[i] > arr[i+1])
             {
-                swap(arr[i], arr[i+1]);
+                swap(arr[i], arr[i+1]);// 大的放在右边
                 isSwapped = true;
+                SwapIndex=i+1;// 已经有序的位置
             }
         }
 
-        // After iteration, the last element has been sorted
-        // so it will be ignored in the next iteration
-        --unsortedElements;
+        if(SwapIndex)
+            unsortedElements=SwapIndex+1; // 跳过已经有序的部分===================改进=====
+        else
+            --unsortedElements;
     }
-    // Do comparison again if there's swapped element
-    // otherwise, all array's elements have been sorted
+    // 如果未发生交换，则原序列已经 有序了===可提前结束排序过程
     while(isSwapped);
 }
 
