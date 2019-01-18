@@ -1919,35 +1919,150 @@ void BubbleSort(int arr[], int arrSize)
 }
 ```
 ### 4.2 选择 Selection
->
+> 冒泡改进，选择排序，找到最小的与指定位置交换，只交换一次
 ```c
+void SelectionSort(int arr[], int arrSize)
+{
+    // 最小元素索引
+    int minIndex;
+
+    // 总共遍历 n-1次
+    for(int i = 0; i < arrSize - 1; ++i)
+    {
+        // 每次剩余序列中的最小值
+        minIndex = i;
+        // 在后面无序序列中寻找最小值
+        for(int j = i + 1; j < arrSize; ++j)
+        {
+            // 更新最小元素 索引
+            if (arr[j] < arr[minIndex])
+                minIndex = j;
+        }
+
+        // 将最小元素放入有序序列的末尾
+        swap(arr[i], arr[minIndex]);
+    }
+}
+```
+### 4.3 插入 Insert 排序，打牌
+> 插入排序，类似打牌时，对拿到的牌一次插入到有序序列中的合适位置
+```c
+void InsertionSort(int arr[], int arrSize)
+{
+    // 依次拿出后面无序序列中的元素，插入前面有序序列中的合适位置
+    for(int i = 1; i < arrSize; ++i)
+    {
+        // 当前 需要插入的元素
+        int refValue = arr[i];
+
+        int j;
+        // 0,...,i-1是已经拿到的牌，已经有序的序列
+        for(j = i - 1; j >= 0; --j)
+        {
+            // 将当前元素 refValue 插入到 前面有序的序列中
+            if(arr[j] > refValue)
+                arr[j+1] = arr[j]; // 序列中大于带插入元素则依次后移 
+            else
+                break; // 找到 待插入元素 的 合适位置了
+        }
+
+        // 将 待插入元素插入合适位置
+        // arr[j] 小于 refValue,则其应该插入 j + 1 位置
+        arr[j + 1] = refValue;
+    }
+}
 
 ```
-### 4.3 插入 Insert
->
+### 4.4 归并 Merge 先将序列依次二分，构建左右两个有序序列，最后合并在一起
+https://github.com/Ewenwan/CPP-Data-Structures-and-Algorithms/blob/master/Chapter04/Merge_Sort/Merge_Sort.cpp
+
+### 4.5快排 Quick
+> 快排 Quick 左右指针，依次将比参考元素大的放在右边，反之放在左边，对子序列
 ```c
+// 按照参考元素，将大的元素放在一边，小的放在另一边，找到分区中枢 索引
+int Partition(
+    int arr[],
+    int startIndex,
+    int endIndex)
+{
+    // 子区间第一个元素 作为 参考元素
+    int pivot = arr[startIndex];
+
+    // 
+    int middleIndex = startIndex;
+
+    // Iterate through arr[1 ... n - 1]
+    for (int i = startIndex + 1; i <= endIndex; ++i)
+    {   
+        // 单个指针 遍历，可以使用双指针版
+        if (arr[i] < pivot)
+        {
+            ++middleIndex;// 左边小元素序列 尾id
+            // 小元素放在左边
+            swap(arr[i], arr[middleIndex]);
+        }
+    }
+
+    // 参考元素放在 中枢的位置
+    swap(arr[startIndex], arr[middleIndex]);
+
+    // 中枢 索引
+    return middleIndex;
+}
+
+void QuickSort(
+    int arr[],
+    int startIndex,
+    int endIndex)
+{
+    // 
+    if (startIndex < endIndex)
+    {
+        // 将数组分开，小的放左边，大的放右边，返回中枢索引
+        int pivotIndex = Partition(arr, startIndex, endIndex);
+
+        // 快排左边 arr[startIndex ... pivotIndex - 1]
+        QuickSort(arr, startIndex, pivotIndex - 1);
+
+        // 快排右边  arr[pivotIndex + 1 ... endIndex]
+        QuickSort(arr, pivotIndex + 1, endIndex);
+    }
+}
 
 ```
-### 4.4 归并 Merge
->
+### 4.6 计数 Counting 先统计数据 生成 直方图分布 按照直方图生成有序数组
+> 生成 直方图分布 按照直方图生成有序数组
 ```c
+void CountingSort(int arr[], int arrSize)
+{
+    // 生成 数组数据 的 直方图分布
+    
+    // 需要假设数据范围，可以先找到 数据的最大值最小值
+    int counterSize = 10;
+    int * counterArray = new int [counterSize];
+    // 直方图统计
+    for(int i = 0; i < arrSize; ++i)// 每个数组元素 划分到 对应的 直方图bin中
+    {
+        ++counterArray[arr[i]]; // 对应元素arr[i] 占据的 直方图bin 计数+1 
+    }
 
+    // 按照数据直方图分布生成 有序数组====
+    int arrCounter = 0;// 数组index
+    for(int i = 0; i < counterSize; ++i)// 所有直方图bin
+    {
+        while(counterArray[i] > 0)// 该bin 还有计数，原数组中有该bin的值(可能不止一个)
+        {
+            // 从小到大的直方图 bin 依次放入 有序数组
+            arr[arrCounter++] = i;
+            // 该bin 计数-1
+            --counterArray[i];
+        }
+    }
+}
 ```
-### 4.5 快排 Quick
->
-```c
+### 4.7 基数 Radix 先按最低位值 0~9直方图分布，再按次低位数字直方图分布,...,
+https://github.com/Ewenwan/CPP-Data-Structures-and-Algorithms/blob/master/Chapter04/Radix_Sort/Radix_Sort.cpp
 
-```
-### 4.6 计数 Counting
->
-```c
-
-```
-### 4.7 基数 Radix
->
-```c
-
-```
 ## 章5 查找算法 Searching 线性二分====================
 ### 5.1 线性 Linear search
 >
