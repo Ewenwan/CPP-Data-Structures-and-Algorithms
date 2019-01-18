@@ -2065,39 +2065,173 @@ https://github.com/Ewenwan/CPP-Data-Structures-and-Algorithms/blob/master/Chapte
 
 ## 章5 查找算法 Searching 线性二分====================
 ### 5.1 线性 Linear search
->
+> 按索引一次对比，线性查找 
 ```c
-
+int LinearSearch(
+    int arr[],
+    int startIndex,
+    int endIndex,
+    int val)
+{
+    // 按索引一次对比
+    for(int i = startIndex; i < endIndex; ++i)
+    {
+        if(arr[i] == val) // 找到
+        {
+            return i;// 返回对应的 位置索引
+        }
+    }
+    return -1; // 未找到 返回-1
+}
 ```
 ### 5.2 二分 Binary search
->
+>  对于有序序列，使用二分搜索，不断缩小搜索空间
 ```c
+int BinarySearch(
+    int arr[],
+    int startIndex,
+    int endIndex,
+    int val)
+{
+    // 对于有序序列，不断缩小搜索空间
+    if(startIndex <= endIndex)
+    {
+        // 子序列 中间位置
+        int middleIndex = startIndex + (endIndex - startIndex) / 2;
 
+        // 相等的情况，更少见，适当放在最后一个 判断分支
+        if(arr[middleIndex] == val)
+        {
+            return middleIndex;
+        }
+        // 中间值大于要找的值，原序列为升序排列，则在左边找 arr[startIndex ... middleIndex - 1]
+        else if(arr[middleIndex] > val)
+        {
+            return BinarySearch(arr, startIndex, middleIndex - 1, val);
+        }
+        //  在右边找 arr[middleIndex + 1 ... endIndex]
+        else
+        {
+            return BinarySearch(arr, middleIndex + 1, endIndex, val);
+        }
+    }
+
+    // 没找到-1
+    return -1;
+}
 ```
 ### 5.3 三分 Ternary search
->
+> 有序区间三分，依次检查，迭代三个区间中的不同区间
 ```c
+int TernarySearch(
+    int arr[],
+    int startIndex,
+    int endIndex,
+    int val)
+{
+    // 不断搜小搜索空间
+    if(startIndex <= endIndex)
+    {
+        // 三分左边第一个点
+        int middleLeftIndex = startIndex + (endIndex - startIndex) / 3;
 
+        // 三分左边第二个点
+        int middleRightIndex =
+            middleLeftIndex + (endIndex - startIndex) / 3;
+
+        // 检查 第一个点值
+        if(arr[middleLeftIndex] == val)
+        {
+            return middleLeftIndex;
+        }
+        // 检查第二个点值
+        else if(arr[middleRightIndex] == val)
+        {
+            return middleRightIndex;
+        }
+        // 迭代三分中的第一个区间 arr[startIndex ... middleLeftIndex - 1]
+        else if(arr[middleLeftIndex] > val)
+        {
+            return TernarySearch(
+                arr,
+                startIndex,
+                middleLeftIndex - 1,
+                val);
+        }
+        // 迭代三分中的第三个区间arr[middleRightIndex + 1 ... endIndex]
+        else if(arr[middleRightIndex] < val)
+        {
+            return TernarySearch(
+                arr,
+                middleRightIndex + 1,
+                endIndex,
+                val);
+        }
+        // 迭代三分中的第二个区间 arr[middleLeftIndex + 1 ... middleRightIndex - 1]
+        else
+        {
+            return TernarySearch(
+                arr,
+                middleLeftIndex + 1,
+                middleRightIndex - 1,
+                val);
+        }
+    }
+    // 没找到-1
+    return -1;
+}
 ```
-### 5.4 插补 Interpolation Search 
->
+### 5.4 插补 Interpolation Search  有序序列的 加权取中点 二分查找
+> 加权二分查找
 ```c
+int InterpolationSearch(
+    int arr[],
+    int lowIndex,
+    int highIndex,
+    int val)
+{
+    if(lowIndex <= highIndex)
+    {
+        // 加权取中点 例如 30个元素，最小值5，最大值100，需要查找40
+        // 则按比例 40出现的位置为 (40-5)*30/(100-5)
+        int middleIndex =
+            lowIndex + (
+                (val - arr[lowIndex]) * (highIndex - lowIndex) /
+                (arr[highIndex] - arr[lowIndex]));
 
+        // 比较是否为 寻找的元素
+        if(arr[middleIndex] == val)
+        {
+            return middleIndex;
+        }
+        // 递归左边 arr[lowIndex ... middleIndex - 1]
+        else if(arr[middleIndex] > val)
+        {
+            return InterpolationSearch(arr, lowIndex, middleIndex - 1, val);
+        }
+        // 递归右边 arr[middleIndex + 1 ... highIndex]
+        else
+        {
+            return InterpolationSearch(arr, middleIndex + 1, highIndex, val);
+        }
+    }
+
+    // 未找到 -1
+    return -1;
+}
 ```
 ### 5.5 跳跃 Jump Search 
->
-```c
-```
+先按 线性间隔点 找到目标值出现的子序列，在确定的子序列中线性查找
+
+https://github.com/Ewenwan/CPP-Data-Structures-and-Algorithms/blob/master/Chapter05/Jump_Search/Jump_Search.cpp
+
+
 ### 5.6 指数 Exponential search
->
-```c
+按 指数分布间隔点 找到目标值出现的子序列，在确定的子序列中二分查找
 
-```
 ### 5.7 子表 Sublist search
->
-```c
+https://github.com/Ewenwan/CPP-Data-Structures-and-Algorithms/blob/master/Chapter05/Sublist_Search/Sublist_Search.cpp
 
-```
 
 ## 章6 String 字符数据算法===========================
 
