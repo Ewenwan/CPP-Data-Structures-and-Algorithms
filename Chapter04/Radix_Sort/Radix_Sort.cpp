@@ -1,5 +1,5 @@
 // Project: Radix_Sort.cbp
-// File   : Radix_Sort.cpp
+// File   : Radix_Sort.cpp  基数 Radix 先按最低位值 0~9直方图分布，再按次低位数字直方图分布,...,
 
 #include <iostream>
 #include "Queue.h"
