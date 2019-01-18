@@ -1,5 +1,5 @@
 // Project: Exponential_Search.cbp
-// File   : Exponential_Search.cpp
+// File   : Exponential_Search.cpp 按 指数分布间隔点 找到目标值出现的子序列，在确定的子序列中二分查找
 
 #include <iostream>
 
