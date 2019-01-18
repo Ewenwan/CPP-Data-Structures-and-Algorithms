@@ -1,5 +1,5 @@
 // Project: Jump_Search.cbp
-// File   : Jump_Search.cpp
+// File   : Jump_Search.cpp  先按间隔点找到目标值出现的子序列，在确定的子序列中线性查找
 
 #include <iostream>
 #include <cmath>
@@ -39,25 +39,19 @@ int JumpSearch(
         return -1;
     }
 
-    // Defining step used to jump the array
+    // 二分跳跃步骤数量
     int step = sqrt(arrSize);
 
     // Start comparing from index 0
     int blockIndex = 0;
 
-    // Increase the blockIndex by the step
-    // if blockIndex is lower than array size
-    // and the value of element in blockIndex
-    // is still lower than searched value
+    // 也是有序序列 ， 先按间隔点找到目标值出现的子序列
     while (blockIndex < arrSize && arr[blockIndex] < val)
     {
         blockIndex += step;
     }
 
-    // After find the blockIndex,
-    // perform Linear Search to the sub array
-    // defined by the blockIndex
-    // arr[blockIndex - step .... blockIndex or arrSize]
+    //  在确定的子序列中线性查找 arr[blockIndex - step .... blockIndex or arrSize]
     return LinearSearch(
         arr,
         blockIndex - step,
