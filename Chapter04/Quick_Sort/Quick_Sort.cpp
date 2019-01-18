@@ -1,48 +1,38 @@
 // Project: Quick_Sort.cbp
-// File   : Quick_Sort.cpp
+// File   : Quick_Sort.cpp 按照参考元素，将大的元素放在一边，小的放在另一边，找到分区中枢 索引
 
 #include <iostream>
 
 using namespace std;
 
+// 按照参考元素，将大的元素放在一边，小的放在另一边，找到分区中枢 索引
 int Partition(
     int arr[],
     int startIndex,
     int endIndex)
 {
-    // Set the first item as pivot
+    // 子区间第一个元素 作为 参考元素
     int pivot = arr[startIndex];
 
-    // Left sublist and right sublist
-    // are initially empty
+    // 
     int middleIndex = startIndex;
 
     // Iterate through arr[1 ... n - 1]
     for (int i = startIndex + 1; i <= endIndex; ++i)
-    {
+    {   
+        // 单个指针 遍历，可以使用双指针版
         if (arr[i] < pivot)
         {
-            // the current item is on the left sublist
-            // prepare a seat by shifting middle index
-            ++middleIndex;
-
-            // the arr[middleIndex] is
-            // the member of right sublist,
-            // swap it to the current item which is
-            // member of left list
+            ++middleIndex;// 左边小元素序列 尾id
+            // 小元素放在左边
             swap(arr[i], arr[middleIndex]);
         }
     }
 
-    // By now, the arr[middleIndex] item is
-    // member of left sublist.
-    // We can swap it with the pivot
-    // so the pivot will be in the correct position
-    // which is between left sublist and right sublist
+    // 参考元素放在 中枢的位置
     swap(arr[startIndex], arr[middleIndex]);
 
-    // return the index of pivot
-    // to be used by next quick sort
+    // 中枢 索引
     return middleIndex;
 }
 
@@ -51,21 +41,16 @@ void QuickSort(
     int startIndex,
     int endIndex)
 {
-    // Only perform sort process
-    // if the end index is higher than start index
+    // 
     if (startIndex < endIndex)
     {
-        // Retrieve pivot position from Partition() function
-        // This pivotIndex is the index of element that is already
-        // in correct position
+        // 将数组分开，小的放左边，大的放右边，返回中枢索引
         int pivotIndex = Partition(arr, startIndex, endIndex);
 
-        // Sort left sublist
-        // arr[startIndex ... pivotIndex - 1]
+        // 快排左边 arr[startIndex ... pivotIndex - 1]
         QuickSort(arr, startIndex, pivotIndex - 1);
 
-        // Sort right sublist
-        // arr[pivotIndex + 1 ... endIndex]
+        // 快排右边  arr[pivotIndex + 1 ... endIndex]
         QuickSort(arr, pivotIndex + 1, endIndex);
     }
 }
