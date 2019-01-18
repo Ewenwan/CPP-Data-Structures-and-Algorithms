@@ -1,5 +1,5 @@
 // Project: Binary_Search.cbp
-// File   : Binary_Search.cpp
+// File   : Binary_Search.cpp 对于有序序列，使用二分搜索，不断缩小搜索空间
 
 #include <iostream>
 
@@ -11,37 +11,30 @@ int BinarySearch(
     int endIndex,
     int val)
 {
-    // Only perform searching process
-    // if the end index is higher than
-    // or equals to start index
+    // 对于有序序列，不断缩小搜索空间
     if(startIndex <= endIndex)
     {
-        // Find middle index
+        // 子序列 中间位置
         int middleIndex = startIndex + (endIndex - startIndex) / 2;
 
-        // If the middle index's value is the searched value
-        // then return the index
+        // 相等的情况，更少见，适当放在最后一个 判断分支
         if(arr[middleIndex] == val)
         {
             return middleIndex;
         }
-        // If the middle index's value is greater than the searched value
-        // then perform another Binary Search to the left sub array
-        // arr[startIndex ... middleIndex - 1]
+        // 中间值大于要找的值，原序列为升序排列，则在左边找 arr[startIndex ... middleIndex - 1]
         else if(arr[middleIndex] > val)
         {
             return BinarySearch(arr, startIndex, middleIndex - 1, val);
         }
-        // If the middle index's value is lower than the searched value
-        // then perform another Binary Search to the left sub array
-        // arr[middleIndex + 1 ... endIndex]
+        //  在右边找 arr[middleIndex + 1 ... endIndex]
         else
         {
             return BinarySearch(arr, middleIndex + 1, endIndex, val);
         }
     }
 
-    // Just in case no any value found
+    // 没找到-1
     return -1;
 }
 
