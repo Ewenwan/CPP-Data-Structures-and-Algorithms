@@ -1,5 +1,5 @@
 // Project: Merge_Sort.cbp
-// File   : Merge_Sort.cpp
+// File   : Merge_Sort.cpp 先将序列依次二分，构建左右两个有序序列，最后合并在一起
 
 #include <iostream>
 
@@ -11,19 +11,16 @@ void Merge(
     int middleIndex,
     int endIndex)
 {
-    // Numbers of elements that will be sorted
-    // from startIndex until endIndex
+    // 需要排序的元素 数量
     int totalElements = endIndex - startIndex + 1;
 
-    // Temporary array to store merged array
+    // 临时数据 存储 归并后的数组
     int * tempArray = new int[totalElements];
 
-    // Index of left subarray
-    // arr[startIndex ... middleIndex]
+    // 左子数组 arr[startIndex ... middleIndex]
     int leftIndex = startIndex;
 
-    // Index of right subarray
-    // arr[middleIndex + 1 ... endIndex]
+    // 右值数组 arr[middleIndex + 1 ... endIndex]
     int rightIndex = middleIndex + 1;
 
     // Index of merged array
@@ -99,22 +96,19 @@ void MergeSort(
     int startIndex,
     int endIndex)
 {
-    // Only perform sort process
-    // if the end index is higher than start index
+    // 分
     if(startIndex < endIndex)
     {
-        // Find middle index
+        // 中间 索引
         int middleIndex = (startIndex + endIndex) / 2;
 
-        // Sort left subarray
-        // arr[startIndex ... middleIndex]
+        // 排序左边  arr[startIndex ... middleIndex]
         MergeSort(arr, startIndex, middleIndex);
 
-        // Sort right subarray
-        // arr[middleIndex + 1 ... endIndex]
+        // 排序右边 arr[middleIndex + 1 ... endIndex]
         MergeSort(arr, middleIndex + 1, endIndex);
 
-        // Merge the left and the right subarray
+        // 合
         Merge(arr, startIndex, middleIndex, endIndex);
     }
 
