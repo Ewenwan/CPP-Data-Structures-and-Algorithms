@@ -1,5 +1,5 @@
 // Project: Insertion_Sort.cbp
-// File   : Insertion_Sort.cpp
+// File   : Insertion_Sort.cpp 插入排序，类似打牌时，对拿到的牌一次插入到有序序列中的合适位置
 
 #include <iostream>
 
@@ -7,35 +7,25 @@ using namespace std;
 
 void InsertionSort(int arr[], int arrSize)
 {
-    // Iterate to all array's element
-    for(int i = 0; i < arrSize; ++i)
+    // 依次拿出后面无序序列中的元素，插入前面有序序列中的合适位置
+    for(int i = 1; i < arrSize; ++i)
     {
-        // Set the current element
-        // as reference value
+        // 当前 需要插入的元素
         int refValue = arr[i];
 
-        // variable to shift the element
-        // to right position
         int j;
-
-        // Iterate through the sorted element
-        // to insert the reference value
-        // in right position
+        // 0,...,i-1是已经拿到的牌，已经有序的序列
         for(j = i - 1; j >= 0; --j)
         {
-            // if the value of the current index
-            // is greater than the reference value then
-            // move the current value to right side
-            // otherwise, put the reference value
-            // in the current index
+            // 将当前元素 refValue 插入到 前面有序的序列中
             if(arr[j] > refValue)
-                arr[j+1] = arr[j];
+                arr[j+1] = arr[j]; // 序列中大于带插入元素则依次后移 
             else
-                break;
+                break; // 找到 待插入元素 的 合适位置了
         }
 
-        // here's the line to put the reference value
-        // in the current index (the right position)
+        // 将 待插入元素插入合适位置
+        // arr[j] 小于 refValue,则其应该插入 j + 1 位置
         arr[j + 1] = refValue;
     }
 }
