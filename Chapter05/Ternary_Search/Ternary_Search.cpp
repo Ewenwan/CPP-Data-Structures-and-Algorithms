@@ -1,5 +1,5 @@
 // Project: Ternary_Search.cbp
-// File   : Ternary_Search.cpp
+// File   : Ternary_Search.cpp 三分查找，有序区间三分，依次检查，迭代三个区间中的不同区间
 
 #include <iostream>
 
@@ -11,33 +11,27 @@ int TernarySearch(
     int endIndex,
     int val)
 {
-    // Only perform searching process
-    // if the end index is higher than
-    // or equals to start index
+    // 不断搜小搜索空间
     if(startIndex <= endIndex)
     {
-        // Find index of area of the first third
+        // 三分左边第一个点
         int middleLeftIndex = startIndex + (endIndex - startIndex) / 3;
 
-        // Find index of area of the last third
+        // 三分左边第二个点
         int middleRightIndex =
             middleLeftIndex + (endIndex - startIndex) / 3;
 
-        // If val is at middleLeftIndex
-        // then return middleLeftIndex
+        // 检查 第一个点值
         if(arr[middleLeftIndex] == val)
         {
             return middleLeftIndex;
         }
-        // If val is at middleRightIndex
-        // then return middleRightIndex
+        // 检查第二个点值
         else if(arr[middleRightIndex] == val)
         {
             return middleRightIndex;
         }
-        // If val is at the are of the first third
-        // then perform another Ternary Search to this subarray
-        // arr[startIndex ... middleLeftIndex - 1]
+        // 迭代三分中的第一个区间 arr[startIndex ... middleLeftIndex - 1]
         else if(arr[middleLeftIndex] > val)
         {
             return TernarySearch(
@@ -46,9 +40,7 @@ int TernarySearch(
                 middleLeftIndex - 1,
                 val);
         }
-        // If val is at the area of the last third
-        // then perform another Ternary Search to this subarray
-        // arr[middleRightIndex + 1 ... endIndex]
+        // 迭代三分中的第三个区间arr[middleRightIndex + 1 ... endIndex]
         else if(arr[middleRightIndex] < val)
         {
             return TernarySearch(
@@ -57,9 +49,7 @@ int TernarySearch(
                 endIndex,
                 val);
         }
-        // The val is at the area
-        // between middleLeftIndex and middleRightIndex
-        // arr[middleLeftIndex + 1 ... middleRightIndex - 1]
+        // 迭代三分中的第二个区间 arr[middleLeftIndex + 1 ... middleRightIndex - 1]
         else
         {
             return TernarySearch(
@@ -69,8 +59,7 @@ int TernarySearch(
                 val);
         }
     }
-
-    // Just in case no any value found
+    // 没找到-1
     return -1;
 }
 
