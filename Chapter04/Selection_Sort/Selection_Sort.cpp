@@ -1,5 +1,5 @@
 // Project: Selection_Sort.cbp
-// File   : Selection_Sort.cpp
+// File   : Selection_Sort.cpp 冒泡改进，选择排序，找到最小的与指定位置交换，只交换一次
 
 #include <iostream>
 
@@ -7,29 +7,23 @@ using namespace std;
 
 void SelectionSort(int arr[], int arrSize)
 {
-    // variable to store the index of the minimum value
-    // in each iteration
+    // 最小元素索引
     int minIndex;
 
-    // Iterate until the N-1 elements
+    // 总共遍历 n-1次
     for(int i = 0; i < arrSize - 1; ++i)
     {
-        // Set the first unsorted element
-        // as the minimum value
+        // 每次剩余序列中的最小值
         minIndex = i;
-
-        // Iterate through the unsorted elements only
+        // 在后面无序序列中寻找最小值
         for(int j = i + 1; j < arrSize; ++j)
         {
-            // set the new minimum value
-            // if the saved minimum value is higher
-            // than the current index value
+            // 更新最小元素 索引
             if (arr[j] < arr[minIndex])
                 minIndex = j;
         }
 
-        // Swap the the first unsorted element
-        // with the minimum value
+        // 将最小元素放入有序序列的末尾
         swap(arr[i], arr[minIndex]);
     }
 }
