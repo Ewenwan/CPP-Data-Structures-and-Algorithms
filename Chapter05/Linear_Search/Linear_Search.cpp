@@ -1,5 +1,5 @@
 // Project: Linear_Search.cbp
-// File   : Linear_Search.cpp
+// File   : Linear_Search.cpp  线性搜索
 #include <iostream>
 
 using namespace std;
@@ -10,19 +10,15 @@ int LinearSearch(
     int endIndex,
     int val)
 {
-    // Iterate through the start index
-    // to the end index and
-    // return the searched value's index
+    // 按索引一次对比
     for(int i = startIndex; i < endIndex; ++i)
     {
-        if(arr[i] == val)
+        if(arr[i] == val) // 找到
         {
-            return i;
+            return i;// 返回对应的 位置索引
         }
     }
-
-    // return -1 if no val is found
-    return -1;
+    return -1; // 未找到 返回-1
 }
 
 int main()
