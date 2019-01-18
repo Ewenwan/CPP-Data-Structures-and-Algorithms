@@ -1,5 +1,5 @@
 // Project: Counting_Sort.cbp
-// File   : Counting_Sort.cpp
+// File   : Counting_Sort.cpp 计数 Counting 先统计数据 生成 直方图分布 按照直方图生成有序数组
 
 #include <iostream>
 
@@ -7,29 +7,26 @@ using namespace std;
 
 void CountingSort(int arr[], int arrSize)
 {
-    // Create key/counting array
-    // with assumption that all element value
-    // are from 0 to 9
+    // 生成 数组数据 的 直方图分布
+    
+    // 需要假设数据范围，可以先找到 数据的最大值最小值
     int counterSize = 10;
     int * counterArray = new int [counterSize];
-
-    // Increase the respective counter by 1
-    for(int i = 0; i < arrSize; ++i)
+    // 直方图统计
+    for(int i = 0; i < arrSize; ++i)// 每个数组元素 划分到 对应的 直方图bin中
     {
-        ++counterArray[arr[i]];
+        ++counterArray[arr[i]]; // 对应元素arr[i] 占据的 直方图bin 计数+1 
     }
 
-    // Counter for iterating the arrCounter array
-    int arrCounter = 0;
-
-    for(int i = 0; i < counterSize; ++i)
+    // 按照数据直方图分布生成 有序数组====
+    int arrCounter = 0;// 数组index
+    for(int i = 0; i < counterSize; ++i)// 所有直方图bin
     {
-        while(counterArray[i] > 0)
+        while(counterArray[i] > 0)// 该bin 还有计数，原数组中有该bin的值(可能不止一个)
         {
-            // Restore element to list
+            // 从小到大的直方图 bin 依次放入 有序数组
             arr[arrCounter++] = i;
-
-            // Decrease counter by 1
+            // 该bin 计数-1
             --counterArray[i];
         }
     }
