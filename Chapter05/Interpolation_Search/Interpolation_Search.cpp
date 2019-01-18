@@ -1,5 +1,5 @@
 // Project: Interpolation_Search.cbp
-// File   : Interpolation_Search.cpp
+// File   : Interpolation_Search.cpp 插补查找 有序序列的 加权取中点 二分查找
 
 #include <iostream>
 
@@ -13,35 +13,31 @@ int InterpolationSearch(
 {
     if(lowIndex <= highIndex)
     {
-        // Find middle index
+        // 加权取中点 例如 30个元素，最小值5，最大值100，需要查找40
+        // 则按比例 40出现的位置为 (40-5)*30/(100-5)
         int middleIndex =
             lowIndex + (
                 (val - arr[lowIndex]) * (highIndex - lowIndex) /
                 (arr[highIndex] - arr[lowIndex]));
 
-        // If the middle index's value is the searched value
-        // then return the index
+        // 比较是否为 寻找的元素
         if(arr[middleIndex] == val)
         {
             return middleIndex;
         }
-        // If the middle index's value is greater than the searched value
-        // then perform another Interpolation Search to the left sub array
-        // arr[lowIndex ... middleIndex - 1]
+        // 递归左边 arr[lowIndex ... middleIndex - 1]
         else if(arr[middleIndex] > val)
         {
             return InterpolationSearch(arr, lowIndex, middleIndex - 1, val);
         }
-        // If the middle index's value is lower than the searched value
-        // then perform another Interpolation Search to the right sub array
-        // arr[middleIndex + 1 ... highIndex]
+        // 递归右边 arr[middleIndex + 1 ... highIndex]
         else
         {
             return InterpolationSearch(arr, middleIndex + 1, highIndex, val);
         }
     }
 
-    // Just in case no any value found
+    // 未找到 -1
     return -1;
 }
 
