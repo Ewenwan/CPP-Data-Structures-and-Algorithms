@@ -1,5 +1,5 @@
 // Project: Palindrome.cbp
-// File   : Palindrome.cpp
+// File   : Palindrome.cpp 回文 palindrome 顺读和倒读都一样的词语
 
 #include <iostream>
 #include <algorithm>
@@ -9,17 +9,14 @@ using namespace std;
 bool IsPalindrome(
     string str)
 {
-    // Palindrome is not case sensitive
-    // so we convert all characters
-    // to uppercase
+    // 变大写
     transform(
         str.begin(),
         str.end(),
         str.begin(),
         ::toupper);
 
-    // Palindrome does not care about space
-    // so we remove all spaces if any
+    // 去除空格
     str.erase(
         remove(
             str.begin(),
@@ -27,28 +24,21 @@ bool IsPalindrome(
             ' '),
             str.end());
 
-    // --- Palindrome detector ---
-    // Starting from leftmost and rightmost elements
-    // of the str
+    // 首尾指针
     int left = 0;
     int right = str.length() - 1;
 
-    // Comparing the current leftmost
-    // and rightmost elements
-    // until all elements are checked or
-    // until unmatched characters are found
+    // 首尾指针 向中间遍历 依次比较 对应位置 的 字符 
     while(right > left)
     {
         if(str[left++] != str[right--])
         {
-            return false;
+            return false;// 对应位置由不同的，则不是回文
         }
     }
 
-    // If all characters which are compared
-    // are same, it must be palindrome
+    // 对应位置 字符全部相同，则为回文
     return true;
-    // --- End of palindrome detector ---
 }
 
 int main()
