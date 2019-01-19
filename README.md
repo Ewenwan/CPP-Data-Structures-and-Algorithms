@@ -2234,6 +2234,110 @@ https://github.com/Ewenwan/CPP-Data-Structures-and-Algorithms/blob/master/Chapte
 
 
 ## 章6 String 字符数据算法===========================
+```c
+// 字符数组 构造
+char name[] = "James"; # 默认会加 '\0'结束符
+char name[] = {'J', 'a', 'm', 'e', 's', '\0'};
+char name[6] = "James";
+char name[6] = {'J', 'a', 'm', 'e', 's', '\0'}
+
+// std::string 字符串类 STL容器
+getline();
+push_back();
+pop_back();
+size();
+// 迭代器
+begin();  // 正向 
+end();
+rbegin(); // 反向
+rend();
+```
+
+### 变位词 anagram  重构词
+    triangle（三角形）就有integral（构成整体所必要的）这个变位词
+    Silent（不要吵）和Listen（听我说）也是
+```c
+bool IsAnagram(
+    string str1,
+    string str2)
+{
+    // 转变成 大写
+    transform(
+        str1.begin(),
+        str1.end(),
+        str1.begin(),
+        ::toupper);
+    transform(
+        str2.begin(),
+        str2.end(),
+        str2.begin(),
+        ::toupper);
+
+    // 删除 空格
+    str1.erase(
+        remove(
+            str1.begin(),
+            str1.end(),
+            ' '),
+            str1.end());
+    str2.erase(
+        remove(
+            str2.begin(),
+            str2.end(),
+            ' '),
+            str2.end());
+
+    // A-Z 排序
+    sort(str1.begin(), str1.end());
+    sort(str2.begin(), str2.end());
+    // 或者使用 26个字母 直方图统计，比较字符串的 直方图
+    
+    // 排序后如果相同，则为 变位词
+    return str1 == str2;
+}
+
+```
+
+### 回文 palindrome 顺读和倒读都一样的词语
+```c
+bool IsPalindrome(
+    string str)
+{
+    // 变大写
+    transform(
+        str.begin(),
+        str.end(),
+        str.begin(),
+        ::toupper);
+
+    // 去除空格
+    str.erase(
+        remove(
+            str.begin(),
+            str.end(),
+            ' '),
+            str.end());
+
+    // 首尾指针
+    int left = 0;
+    int right = str.length() - 1;
+
+    // 首尾指针 向中间遍历 依次比较 对应位置 的 字符 
+    while(right > left)
+    {
+        if(str[left++] != str[right--])
+        {
+            return false;// 对应位置由不同的，则不是回文
+        }
+    }
+    // 对应位置 字符全部相同，则为回文
+    return true;
+}
+```
+
+### 十进制数 转 二进制字符串 不断除2取余...
+
+
 
 ## 章7 树结构算法 Tree==============================
 ### 7.1 二叉树(Binary Tree)
