@@ -1,6 +1,8 @@
 // Project: Anagram.cbp
 // File   : Anagram.cpp
-
+// 变位词 anagram  重构词
+// triangle（三角形）就有integral（构成整体所必要的）这个变位词
+// Silent（不要吵）和Listen（听我说）也是
 #include <iostream>
 #include <string>
 #include <algorithm>
@@ -11,9 +13,7 @@ bool IsAnagram(
     string str1,
     string str2)
 {
-    // Anagram is not case sensitive
-    // so we convert all characters
-    // to uppercase
+    // 转变成 大写
     transform(
         str1.begin(),
         str1.end(),
@@ -25,8 +25,7 @@ bool IsAnagram(
         str2.begin(),
         ::toupper);
 
-    // Anagram does not care about space
-    // so we remove all spaces if any
+    // 删除 空格
     str1.erase(
         remove(
             str1.begin(),
@@ -40,12 +39,11 @@ bool IsAnagram(
             ' '),
             str2.end());
 
-    // Then, we sort string1 and string2
+    // A-Z 排序
     sort(str1.begin(), str1.end());
     sort(str2.begin(), str2.end());
 
-    // If they both are anagram,
-    // they will be exactly same after sorted
+    // 排序后如果相同，则为 变位词
     return str1 == str2;
 }
 
