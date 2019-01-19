@@ -1,5 +1,5 @@
 // Project: Decimal_To_BinaryString.cbp
-// File   : Decimal_To_BinaryString.cpp
+// File   : Decimal_To_BinaryString.cpp  十进制数 转 二进制字符串
 
 #include <iostream>
 #include <string>
@@ -10,11 +10,10 @@ using namespace std;
 string DecimalToBinaryString(
     int decimalNumber)
 {
-    // Initial result
+    // 初始化二进制字符串结果
     string binaryString = "0";
 
-    // Only perform this procedure
-    // if decimalNumber is greater than 0
+    // 
     if(decimalNumber > 0)
     {
         // Reset result
@@ -26,8 +25,7 @@ string DecimalToBinaryString(
         // Initialize the division quot
         dv.quot = decimalNumber;
 
-        // Perform these procedure
-        // until the quot is 0
+        // 初二取余
         do
         {
             dv = div(dv.quot, 2);
