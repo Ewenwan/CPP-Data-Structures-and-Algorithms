@@ -49,24 +49,25 @@ class BST // 二叉搜索树
 private:
     BSTNode * root; // 树根节点
 
-protected:
+protected: // 保护类型，可继承==
     BSTNode * Insert(BSTNode * node, int key);
-      // 树中插入一个节点，若为第一次，则设置为根节点，之后根据大小放入左/右子树中的合适位置
-    void PrintTreeInOrder(BSTNode * node); // 按 序列 打印 二叉搜索树 各个节点信息 
-    BSTNode * Search(BSTNode * node, int key); // 搜索一个节点
-    int FindMin(BSTNode * node);// 最小值，一个BST的最左叶子节点的key值就是BST所有key值中最小的。
-    int FindMax(BSTNode * node);// 最大值，一个BST的最右叶子节点的key值就是BST所有key值中最大的。
+      // 树中插入一个节点，若为第一次，则设置为根节点，之后根据大小 递归放入左/右子树中的合适位置
+    void PrintTreeInOrder(BSTNode * node); // 按 序列 递归打印 二叉搜索树 各个节点信息 
+    BSTNode * Search(BSTNode * node, int key); // 搜索一个节点，节点值比给定值大，在左子树递归查找，反之在右子树递归查找
+    int FindMin(BSTNode * node);// 最小值，一个BST的最左叶子节点的key值就是BST所有key值中最小的,不停递归左子树，直到无左子树时。
+    int FindMax(BSTNode * node);// 最大值，一个BST的最右叶子节点的key值就是BST所有key值中最大的,不停递归右子树，直到无右子树时。
     int Successor(BSTNode * node);// x的SUCCESSOR满足x.key<=x.SUCCESSOR.key,并且x.SUCCESSOR.key是距离x.key最近的值，
                                   // 即x.SUCCESSOR.key是x.key的最小上限（minimum ceiling）
-                                  // 在右子树中寻找最小值 / 递归 父节点
+                                  // 在右子树/左父亲 中 递归 寻找最小的
     int Predecessor(BSTNode * node);// 最大下限==
-                                    // 左子树 中最大的
+                                    // 在左子树/右父亲 递归 寻找最大的
     
     BSTNode * Remove(BSTNode * node, int v); // 删除节点
 
 public:
     BST();
-
+    
+    // 外部可访问==============
     void Insert(int key);
     void PrintTreeInOrder();
     bool Search(int key);
