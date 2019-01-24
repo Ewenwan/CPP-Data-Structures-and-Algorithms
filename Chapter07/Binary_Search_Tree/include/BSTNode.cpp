@@ -1,36 +1,31 @@
 // Project: Binary_Search_Tree.cbp
-// File   : BSTNode.cpp
+// File   : BSTNode.cpp 二叉搜索树，左子树<=父节点<=右子树，使用递归结构来实现插入搜索删除等行为
 
 #include "BSTNode.h"
 
+// 类构造函数，根节点指针初始化为 空指针NULL
 BST::BST() : root(NULL)
 {
 }
 
 BSTNode * BST::Insert(BSTNode * node, int key)
 {
-    // If BST doesn't exist
-    // create a new node as root
-    // or it's reached when
-    // there's no any child node
-    // so we can insert a new node here
-    if(node == NULL)
+    // 树中插入一个节点，若为第一次，则设置为根节点
+    if(node == NULL)// 树节点指针为NULL，还没有节点
     {
-        node = new BSTNode;
-        node->Key = key;
-        node->Left = NULL;
+        node = new BSTNode;// 新建一个节点
+        node->Key = key;   // 更新 节点值
+        node->Left = NULL; // 左/右/父 节点指针 为 NULL
         node->Right = NULL;
         node->Parent = NULL;
     }
-    // If the given key is greater than
-    // node's key then go to right subtree
+    // 树中已有节点，给定值比 根节点值大，在右子树中插入
     else if(node->Key < key)
     {
         node->Right = Insert(node->Right, key);
         node->Right->Parent = node;
     }
-    // If the given key is smaller than
-    // node's key then go to left subtree
+    // 给定值 比 根节点值小，在左子树中插入
     else
     {
         node->Left = Insert(node->Left, key);
@@ -53,15 +48,13 @@ void BST::PrintTreeInOrder(BSTNode * node)
     if(node == NULL)
         return;
 
-    // Get the smallest key first
-    // which is in the left subtree
+    //打印左子树
     PrintTreeInOrder(node->Left);
 
-    // Print the key
+    // 打印当前节点值
     std::cout << node->Key << " ";
 
-    // Continue to the greatest key
-    // which is in the right subtree
+    // 打印右子树
     PrintTreeInOrder(node->Right);
 }
 
@@ -74,21 +67,19 @@ void BST::PrintTreeInOrder()
     std::cout << std::endl;
 }
 
+// 搜索一个节点，节点值比给定值大，在左子树递归查找，反之在右子树递归查找
 BSTNode * BST::Search(BSTNode * node, int key)
 {
-    // The given key is
-    // not found in BST
+    // 树非空，递归结束条件
     if (node == NULL)
         return NULL;
-    // The given key is found
+    // 节点值 正好等于 查找值
     else if(node->Key == key)
         return node;
-    // The given is greater than
-    // current node's key
+    // 给定值大，在右子树中查找
     else if(node->Key < key)
         return Search(node->Right, key);
-    // The given is smaller than
-    // current node's key
+    // 给定值小在 左子树中查找
     else
         return Search(node->Left, key);
 }
@@ -106,12 +97,15 @@ bool BST::Search(int key)
         true;
 }
 
+// 一个BST的最左叶子节点的key值就是BST所有key值中最小的。
 int BST::FindMin(BSTNode * node)
 {
     if(node == NULL)
         return -1;
+    // 无左子节点了，该节点就是最小值
     else if(node->Left == NULL)
         return node->Key;
+    // 在 左子树中递归左子树
     else
         return FindMin(node->Left);
 }
@@ -121,13 +115,16 @@ int BST::FindMin()
     return FindMin(root);
 }
 
+// 一个BST的最右叶子节点的key值就是BST所有key值中最大的。
 int BST::FindMax(BSTNode * node)
 {
     if(node == NULL)
         return -1;
+    // 无右子节点了，该节点就是最大值
     else if(node->Right == NULL)
         return node->Key;
     else
+    // 在 右子树中递归右子树
         return FindMax(node->Right);
 }
 
@@ -136,19 +133,19 @@ int BST::FindMax()
     return FindMax(root);
 }
 
+// 指定节点的最小上限（minimum ceiling）： 在右子树中寻找最小值 / 递归 父节点
 int BST::Successor(BSTNode * node)
 {
-    // The successor is the minimum key value
-    // of right subtree
+    // 递归找右子树中的最小值
     if (node->Right != NULL)
     {
-        return FindMin(node->Right);
+        return FindMin(node->Right); // 右子树 中的 最左子节点为最小值
     }
-    // If no any right subtree
+    // 查看父节点中的
     else
-    {
-        BSTNode * parentNode = node->Parent;
-        BSTNode * currentNode = node;
+    {// 如果x不存在右孩子，则检查x是否有父亲节点并且x必须是父亲节点的左孩子
+        BSTNode * parentNode = node->Parent; // 父节点
+        BSTNode * currentNode = node;        // 当前节点
 
         // If currentNode is not root and
         // currentNode is its right children
@@ -183,6 +180,7 @@ int BST::Successor(int key)
         Successor(keyNode);
 }
 
+//最大下限
 int BST::Predecessor(BSTNode * node)
 {
     // The predecessor is the maximum key value
