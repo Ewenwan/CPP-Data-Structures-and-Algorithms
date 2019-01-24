@@ -2609,12 +2609,30 @@ int BST::FindMax(BSTNode * node)
         return FindMax(node->Right);
 }
 ```
-### 7.3 平衡二叉搜索树  balanced BST (AVL)
+### 7.3 平衡二叉搜索树  balanced BST (AVL)  Adelson-Velskii 和 Landis 在 1962 发明
+```cpp
+平衡二叉树是对二叉查找的一种改进，对于二叉查找树的一个明显的缺点就是，
+树的结构仍旧具有极大的变动性，最坏的情况下就是一棵单支二叉树，丢失了二叉查找树一些原有的优点。
+平衡二叉树定义（AVL）：
+        它或者是一棵空树，或者是具有一下性质的二叉查找树--
+	它的结点左子树和右子树的深度之差不超过1,而且该结点的左子树和右子树都是一棵平衡二叉树。
+ 平衡因子：结点左子树的深度-结点右子树的深度。
+
+https://github.com/Ewenwan/CPP-Data-Structures-and-Algorithms/blob/master/Chapter07/Binary_Search_Tree/src/AVLNode.cpp
+
+```
+
+
 
 ### 7.4 二叉堆(Binary heap)
 [参考](https://blog.csdn.net/Colton_Null/article/details/80963217)
 >
 ```c
+二叉堆(binary heap)是一种通常用于实现优先队列的数据结构。
+二叉堆是一颗除底层外被完全填满的二叉树，对于底层上的元素满足从左到右填入的特性。
+基于二叉堆的这个特性，我们可以用一个数组在表示这种数据结构，不需要使用链。
+
+https://github.com/Ewenwan/CPP-Data-Structures-and-Algorithms/blob/master/Chapter07/Binary_Heap/src/BinaryHeap.cpp  
 ```
 
 ## 章8 哈希算法 Hash===============================
