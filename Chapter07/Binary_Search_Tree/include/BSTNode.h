@@ -15,7 +15,7 @@
 其只要求当前节点与当前节点的左右子节点满足一定关系。
 下面以非降序二叉搜索树为例。
 
-/*  A simple binary search tree
+ * A simple binary search tree
  *           6                  6
  *          / \                / \
  *         /   \              /   \
@@ -25,7 +25,7 @@
  *     2     7     9      2     4*    9
  *
  *       (A) BST             (B) 非 BST， 因为根节点6大于右子树中的节点4。
- * */
+
 */
 
 #ifndef BSTNODE_H
@@ -33,30 +33,36 @@
 
 #include <iostream>
 
-class BSTNode
+class BSTNode  // 二叉搜索树节点
 {
 public:
     int Key;
-    BSTNode * Left;
-    BSTNode * Right;
-    BSTNode * Parent;
-    int Height;
+    BSTNode * Left; // 左子节点 指针
+    BSTNode * Right;// 右子节点 指针
+    BSTNode * Parent; // 比普通的二叉树多一个父节点指针
+                      // 因为要 通过左子节点 访问 父节点，方便遍历 二叉搜索树
+    int Height;//当前子树的高度??
 };
 
-class BST
+class BST // 二叉搜索树
 {
 private:
-    BSTNode * root;
+    BSTNode * root; // 树根节点
 
 protected:
     BSTNode * Insert(BSTNode * node, int key);
-    void PrintTreeInOrder(BSTNode * node);
-    BSTNode * Search(BSTNode * node, int key);
-    int FindMin(BSTNode * node);
-    int FindMax(BSTNode * node);
-    int Successor(BSTNode * node);
-    int Predecessor(BSTNode * node);
-    BSTNode * Remove(BSTNode * node, int v);
+      // 树中插入一个节点，若为第一次，则设置为根节点，之后根据大小放入左/右子树中的合适位置
+    void PrintTreeInOrder(BSTNode * node); // 按 序列 打印 二叉搜索树 各个节点信息 
+    BSTNode * Search(BSTNode * node, int key); // 搜索一个节点
+    int FindMin(BSTNode * node);// 最小值，一个BST的最左叶子节点的key值就是BST所有key值中最小的。
+    int FindMax(BSTNode * node);// 最大值，一个BST的最右叶子节点的key值就是BST所有key值中最大的。
+    int Successor(BSTNode * node);// x的SUCCESSOR满足x.key<=x.SUCCESSOR.key,并且x.SUCCESSOR.key是距离x.key最近的值，
+                                  // 即x.SUCCESSOR.key是x.key的最小上限（minimum ceiling）
+                                  // 在右子树中寻找最小值 / 递归 父节点
+    int Predecessor(BSTNode * node);// 最大下限==
+                                    // 左子树 中最大的
+    
+    BSTNode * Remove(BSTNode * node, int v); // 删除节点
 
 public:
     BST();
