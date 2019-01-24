@@ -2801,8 +2801,42 @@ BABACAC ADADABB CBABEBE DDABEEEBB
 ### 9.2 分治 Divide and conquer algorithms
 >
 ```c
-
-
+	       问题
+	      divide 
+	     分解成小问题
+	  /              \
+       子问题1          子问题2
+ 治-问题求解 |  conquer    |
+       子问题1答案      子问题2答案
+           \           /
+	     \       /
+           合并结果 combine
+	     问题结果
+	     
+实例:
+      A. 有序列表的 二分搜索，
+             待查元素 和 中间元素比较，
+             1.若相等，返回中间元素索引
+	     2.待查元素 < 中间元素，则递归遍历左区间
+	     3.待查元素 > 中间元素，则递归遍历右区间
+      B. 快排
+             1.选择一个 比较中枢元素
+	     2.比 比较元素小的 移动到左边，反之移动到右边
+	     3.比较元素 放入 分割中枢
+	     4.递归左区间
+	     5.递归右区间
+	     
+     C.  归并排序
+             1. 将数组一次分成两个区间
+	     2. 对每个子区间进行排序
+	     3. 合并每个子区间
+	     
+      D. 选择问题   selection problems
+      E. 矩阵乘法计算问题 matrix multiplication
+                 矩阵分块 进行 值矩阵乘法
+          卷积运算，矩阵乘法 快速矩阵乘法 
+	https://github.com/Ewenwan/MVision/blob/master/CNN/HighPerformanceComputing/%E5%BF%AB%E9%80%9F%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95.md
+	
 ```
 ### 9.3 动态规划 Dynamic programming
 >
