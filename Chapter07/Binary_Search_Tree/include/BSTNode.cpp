@@ -1,7 +1,7 @@
 // Project: Binary_Search_Tree.cbp
 // File   : BSTNode.cpp 二叉搜索树，左子树<=父节点<=右子树，使用递归结构来实现插入搜索删除等行为
-// 参考 https://www.cnblogs.com/fu11211129/p/4214047.html
-
+// 参考1 https://www.cnblogs.com/fu11211129/p/4214047.html
+// 参考2 https://www.cnblogs.com/eudiwffe/p/6207196.html
 #include "BSTNode.h"
 
 // 类构造函数，根节点指针初始化为 空指针NULL
