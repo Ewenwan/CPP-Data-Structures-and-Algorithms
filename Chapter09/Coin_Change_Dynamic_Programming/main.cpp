@@ -1,26 +1,27 @@
 #include <iostream>
-
+// 动态规划解决 找零问题
 using namespace std;
-
+// S[] 可找零钱币列表 m币种数量 n待找零钱数
 int count(int S[], int m, int n)
 {
     int x, y;
 
-    // Base саѕе (n = 0)
+    // 建立一个二维表 Base саѕе (n = 0)
     int table[n + 1][m];
 
     // Fіll thе еntеrіеѕ for 0 vаluе саѕе
     // (n = 0)
     for (int i = 0; i < m; ++i)
-        table[0][i] = 1;
+        table[0][i] = 1; // 
 
     // Fill rеѕt оf the table еntrіеѕ іn bоttоm
     // up mаnnеr
-    for (int i = 1; i < n + 1; ++i)
+    for (int i = 1; i < n + 1; ++i) // 需要找零的 钱 数，需要的找零 币值范围
     {
-        for (int j = 0; j < m; ++j)
+        for (int j = 0; j < m; ++j)// 每种币值
         {
-            //solutions соunt іnсludіng S[j]
+            // 总钱数i 使用S[j]找零 solutions соunt іnсludіng S[j]
+               // 结果和 总钱数i-S[j] 找零 一样
             x = (i - S[j] >= 0) ?
                 table[i - S[j]][j] :
                 0;
