@@ -26,10 +26,10 @@ int count(int S[], int m, int n)
                 table[i - S[j]][j] :
                 0;
 
-            //ѕоlutіоnѕ соunt excluding S[j]
+            // 总钱数i 不使用S[j]找零 ѕоlutіоnѕ соunt excluding S[j]
             y = (j >= 1) ? table[i][j-1] : 0;
 
-            // tоtаl соunt
+            // 两种情况之和
             table[i][j] = x + y;
         }
     }
