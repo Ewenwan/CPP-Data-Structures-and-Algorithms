@@ -2637,37 +2637,195 @@ https://github.com/Ewenwan/CPP-Data-Structures-and-Algorithms/blob/master/Chapte
 
 ## 章8 哈希算法 Hash===============================
 ### 8.1 hash tables
->
+> 
 ```c
+https://github.com/Ewenwan/CPP-Data-Structures-and-Algorithms/blob/master/Chapter08/Hash_Table_SC/src/HashTable.cpp
+
+HashTable::HashTable()
+{
+    for (int i = 0; i < TABLE_SIZE; ++i)
+      tableList[i].clear();
+}
+
+int HashTable::HashFunction(int key)
+{
+    return key % TABLE_SIZE;
+}
+
 ```
-### 8.2
-### 8.3 
-### 8.4
 
 
 ## 章9 常用算法Real Life 贪婪&分治&动态规划&暴力&随机&回溯====
 ### 9.1 贪婪 Greedy algorithms
->
-```c
+>  coin-changing 找零
+```cpp
+// 找零问题，反向遍历可找零币值列表，尽量使用 大币值 找零，剩余找零小于 最小币值 时 结束
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void MinimalChangeCoin(double changingNominal)
+{
+    // 所有美元币值 数组
+    double denom[] =
+        {0.01, 0.05, 0.10, 0.25, 1, 2, 5, 10, 20, 50, 100};
+    // 数组元素数量
+    int totalDenom = sizeof(denom) / sizeof(denom[0]);
+
+    // 初始化一个结果
+    vector<double> result;
+
+    // 反向遍历可找零币值列表
+    for (int i = totalDenom - 1; i >= 0; --i)
+    {
+        // 尽量使用 大币值 找零
+        while (changingNominal >= denom[i])
+        {
+           changingNominal -= denom[i];// 使用 denom[i]币
+           result.push_back(denom[i]); // 记录使用
+        }
+        // 剩余找零小于 最小币值 则 结束
+        if (changingNominal < denom[0])
+            break;
+    }
+
+    // 打印找零钱币列表
+    for (int i = 0; i < result.size(); ++i)
+        cout << result[i] << " ";
+    cout << endl;
+}
+
+int main()
+{
+    cout << "Coin Change Problem" << endl;
+
+    // 总找零钱数
+    float change = 17.61;
+
+    // Getting the minimal
+    cout << "Minimal number of change for ";
+    cout << change << " is " << endl;
+    MinimalChangeCoin(change);
+
+    return 0;
+}
+```
+
+>   Huffman coding 霍夫曼编码 
+```cpp
+https://github.com/Ewenwan/CPP-Data-Structures-and-Algorithms/blob/master/Chapter09/Huffman_Coding/main.cpp
+
+霍夫曼编码(Huffman Coding)是一种编码方法，霍夫曼编码是可变字长编码(VLC)的一种。
+
+霍夫曼编码使用变长编码表对源符号（如文件中的一个字母）进行编码，其中变长编码表是通过一种评估来源符号出现机率的方法得到的，出现机率高的字母使用较短的编码，反之出现机率低的则使用较长的编码，这便使编码之后的字符串的平均长度、期望值降低，从而达到无损压缩数据的目的。
+
+霍夫曼编码的具体步骤如下：
+
+1）将信源符号的概率按减小的顺序排队。
+
+2）把两个最小的概率相加，并继续这一步骤，始终将较高的概率分支放在右边，直到最后变成概率１。
+
+3）画出由概率１处到每个信源符号的路径，顺序记下沿路径的０和１，所得就是该符号的霍夫曼码字。   
+
+4）将每对组合的左边一个指定为0，右边一个指定为1（或相反）。
+
+例：现有一个由5个不同符号组成的30个符号的字符串：
+
+BABACAC ADADABB CBABEBE DDABEEEBB
+
+1首先计算出每个字符出现的次数（概率）：
+	B   10次
+	A   8
+	C   3
+	D   4
+	E   5
+把出现次数（概率）最小的两个相加，并作为左右子树，重复此过程，直到概率值为1
+左小右大
+ 1.   B:10  A:8  C:3  D:4  E:5
+ 2.   B:10  A:8     7     E:5
+                  /  \
+                C:3  D:4
+ 3.   B:10  A:8     12 	       
+	           /  \
+		  E:5  7     
+                      /  \
+                     C:3  D:4
+	       
+ 4.    12    18        
+            /   \
+          A:8   B:10   
+   
+ 5.       30 
+       /      \
+     12        18        
+    /   \      /   \
+   E:5   7    A:8  B:10
+        /   \
+       C:3   D:4
+		  
+将每个二叉树的左边指定为0，右边指定为1
+
+ 6.      30 
+     0/     1\
+     12        18        
+    0/   1\   0/  1\
+   E:5   7    A:8  B:10
+       0/  1\
+      C:3  D:4
+
+沿二叉树顶部到每个字符路径，获得每个符号的编码
+                  编码
+	B   10次  11
+	A   8     10
+	C   3     010
+	D   4     011
+	E   5     00
+	
+我们可以看到出现次数（概率）越多的会越在上层，编码也越短，出现频率越少的就越在下层，编码也越长。
+当我们编码的时候，我们是按“bit”来编码的，解码也是通过bit来完成，
+如果我们有这样的bitset “10111101100″ 那么其解码后就是 “ABBDE”。
+所以，我们需要通过这个二叉树建立我们Huffman编码和解码的字典表。
+
+这里需要注意的是，Huffman编码使得每一个字符的编码都与另一个字符编码的前一部分不同，
+不会出现像’A’：00，  ’B’：001，这样的情况，解码也不会出现冲突。
+
+霍夫曼编码的局限性
+
+利用霍夫曼编码，每个符号的编码长度只能为整数，所以如果源符号集的概率分布不是2负n次方的形式，则无法达到熵极限；
+输入符号数受限于可实现的码表尺寸；译码复杂；
+需要实现知道输入符号集的概率分布；没有错误保护功能。
+
+
 ```
 ### 9.2 分治 Divide and conquer algorithms
 >
 ```c
+
+
 ```
 ### 9.3 动态规划 Dynamic programming
 >
 ```c
+
+
 ```
 ### 9.4 暴力 Brute-force algorithms
 >
 ```c
+
+
 ```
 ### 9.5 随机 Randomized algorithms
 >
 ```c
+
+
 ```
 ### 9.6 回溯 Backtracking algorithms
 >
 ```c
+
+
 ```
 
